@@ -1,0 +1,31 @@
+[
+  {
+    "id": "C1",
+    "name": "Noto Sans SC",
+    "chinese": "思源系黑体",
+    "font": "NotoSansSC-VF.ttf",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt",
+    "kind": "SIL OFL 1.1",
+    "note": "中性、清楚，适合作为默认界面字体",
+    "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "family": "Noto Sans SC Thin",
+    "fontVersion": "Version 2.004-H2;hotconv 1.0.118;makeotfexe 2.5.65603",
+    "bundledFile": "NotoSansSC-Variable.woff2",
+    "bundledSHA256": "ebcb4fa951c9db060e7b2800ef819ea67f8c277d37b975c19764932b30a61930"
+  },
+  {
+    "id": "E1",
+    "name": "Inter",
+    "font": "Inter-UI-VF.ttf",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt",
+    "kind": "SIL OFL 1.1",
+    "note": "现代软件界面，首选搭配",
+    "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+    "family": "Inter",
+    "fontVersion": "Version 4.001;git-66647c0bb",
+    "bundledFile": "Inter-Variable.woff2",
+    "bundledSHA256": "b178c576dea5417ee8dab3c9a2a12ba50dbf02d1a9efacd9e8d3fa1237148e18"
+  }
+]

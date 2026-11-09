@@ -1,0 +1,162 @@
+{
+  "files": {
+    "glb": "a02012d3f61b78ddd36506b9be55c1bc7a15cad148bf6e34517314d9c919523f", 
+    "native": "abd538822f2df9c2e92f2c1f216ca983c0f1093f07aa5e3d3c08d118f5856b7d"
+  }, 
+  "materials": [
+    {
+      "color": [
+        0.8, 
+        0.8, 
+        0.8
+      ], 
+      "roughness": 0.5, 
+      "id": "material_00", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.8, 
+        0.8, 
+        0.8
+      ], 
+      "roughness": 0.5, 
+      "id": "material_01", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.8, 
+        0.8, 
+        0.8
+      ], 
+      "roughness": 0.5, 
+      "id": "material_02", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.88, 
+        0.5, 
+        0.05
+      ], 
+      "roughness": 0.14, 
+      "id": "material_03", 
+      "metallic": 1
+    }, 
+    {
+      "color": [
+        0.8, 
+        0.8, 
+        0.8
+      ], 
+      "roughness": 0.5, 
+      "id": "material_04", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.8, 
+        0.8, 
+        0.8
+      ], 
+      "roughness": 0.5, 
+      "id": "material_05", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.012, 
+        0.012, 
+        0.014
+      ], 
+      "roughness": 0.6, 
+      "id": "material_06", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.14, 
+        0.14, 
+        0.14
+      ], 
+      "roughness": 0.65, 
+      "id": "material_07", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.18, 
+        0.165, 
+        0.14
+      ], 
+      "roughness": 0.3, 
+      "id": "material_08", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.018, 
+        0.019, 
+        0.023
+      ], 
+      "roughness": 0.31, 
+      "id": "material_09", 
+      "metallic": 0
+    }, 
+    {
+      "color": [
+        0.9, 
+        0.72, 
+        0.47
+      ], 
+      "roughness": 0.18, 
+      "id": "material_10", 
+      "metallic": 1
+    }, 
+    {
+      "color": [
+        0.86, 
+        0.65, 
+        0.4
+      ], 
+      "roughness": 0.18, 
+      "id": "material_11", 
+      "metallic": 1
+    }, 
+    {
+      "color": [
+        0.82, 
+        0.6, 
+        0.35
+      ], 
+      "roughness": 0.2, 
+      "id": "material_12", 
+      "metallic": 1
+    }, 
+    {
+      "color": [
+        0.73, 
+        0.74, 
+        0.76
+      ], 
+      "roughness": 0.23, 
+      "id": "material_13", 
+      "metallic": 1
+    }
+  ], 
+  "checks": {
+    "exportedMeshes": 495, 
+    "cameras": 1, 
+    "nativeObjectCount": 523, 
+    "missingTextures": [], 
+    "updatedLightPowersVerified": true, 
+    "areaLights": 3, 
+    "cornerHoles": 4, 
+    "nativeReopened": true, 
+    "holeAxesClear": true, 
+    "cameraUnchanged": true, 
+    "contactPads": 44, 
+    "goldBlocks": 54
+  }
+}

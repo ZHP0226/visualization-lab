@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "id": "e136db00-110a-4d3e-9252-948d1e10283f",
+  "name": "dark-metal-chip-demo",
+  "createdAt": "2026-11-08T19:08:38.607Z",
+  "models": [
+    {
+      "id": "6ce23814-f2cb-454b-9c2a-5cefae8622e4",
+      "path": "MetalChip_v001.glb",
+      "sha256": "57e0b7f902c814c32634d4c0e9c7a65660d12ccb17129e52514507fdc09b9115",
+      "subject": "MetalChip",
+      "referenceIds": [
+        "0ed8e081-7bd5-4d62-8ef6-fd17ba9cf8e1"
+      ],
+      "referenceBinding": "manual",
+      "nativeSource": "MetalChip_v001.c4d"
+    },
+    {
+      "id": "95089b96-5a37-40e1-b0df-a52005fc8f29",
+      "path": "MetalChip_v002.glb",
+      "sha256": "a02012d3f61b78ddd36506b9be55c1bc7a15cad148bf6e34517314d9c919523f",
+      "subject": "MetalChip",
+      "referenceIds": [
+        "0ed8e081-7bd5-4d62-8ef6-fd17ba9cf8e1"
+      ],
+      "referenceBinding": "manual",
+      "nativeSource": "MetalChip_v002.c4d",
+      "derivedFrom": "6ce23814-f2cb-454b-9c2a-5cefae8622e4"
+    }
+  ],
+  "renders": [
+    {
+      "id": "0ed8e081-7bd5-4d62-8ef6-fd17ba9cf8e1",
+      "path": "MetalChip_reference.png",
+      "sha256": "de0064f8df44e91ebd3e86c55977d6bdb9f34f6798ce9fb3e98220026167b559",
+      "imageRole": "reference",
+      "subject": "MetalChip"
+    },
+    {
+      "id": "75a3ca66-2678-4aeb-912c-d3bd30f80f15",
+      "path": "MetalChip_v001.png",
+      "sha256": "b51ef4d6d47fa83a612db9b9f1aecdc66fab329c7d86b697b40a1b6390150cf8",
+      "imageRole": "render",
+      "subject": "MetalChip"
+    },
+    {
+      "id": "7aface5d-885e-46c4-9db0-4c7a6a85e4b0",
+      "path": "MetalChip_v002.png",
+      "sha256": "0bfd3449f53c36e48740be2b19d00c339af44f8eaf49e99a0bd2505723e762b3",
+      "imageRole": "render",
+      "subject": "MetalChip"
+    }
+  ],
+  "links": {
+    "6ce23814-f2cb-454b-9c2a-5cefae8622e4": "75a3ca66-2678-4aeb-912c-d3bd30f80f15",
+    "95089b96-5a37-40e1-b0df-a52005fc8f29": "7aface5d-885e-46c4-9db0-4c7a6a85e4b0"
+  },
+  "resources": []
+}

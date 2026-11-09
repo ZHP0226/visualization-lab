@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "pillars": 54,
+    "contacts": 44,
+    "mounts": 4,
+    "traces": 122
+  },
+  "meshCount": 495,
+  "triangleCount": 71944,
+  "embeddedGLB": true,
+  "finiteGeometry": true,
+  "holeDiskRaysClear": 36,
+  "pngSize": [
+    1536,
+    1024
+  ]
+}

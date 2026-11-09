@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0-draft",
+  "status": "pending_user_review",
+  "purpose": "可视化实验室材质球样片；外观预设，不代表实测材料光学常数",
+  "software": [
+    "blender",
+    "c4d"
+  ],
+  "rig": {
+    "version": "single-light-v003",
+    "radius": 1,
+    "center": [
+      0,
+      0,
+      1.025
+    ],
+    "camera": {
+      "position": [
+        4,
+        -4,
+        6.68185424949238
+      ],
+      "target": [
+        0,
+        0,
+        1.025
+      ],
+      "focalLength": 70,
+      "elevationDegrees": 45
+    },
+    "background": [
+      0.015,
+      0.018,
+      0.024
+    ],
+    "lights": [
+      {
+        "name": "Single_soft_light",
+        "position": [
+          -4.636443966187528,
+          -1.2423314164920998,
+          5.824999999999999
+        ],
+        "shape": "DISK",
+        "width": 6,
+        "height": 6,
+        "power": 2400,
+        "c4dBrightness": 2.85
+      }
+    ],
+    "render": {
+      "size": 1024,
+      "samples": 96,
+      "seed": 42,
+      "threads": 8,
+      "c4dReflectionSampleLevel": 6
+    },
+    "blenderWorldStrength": 0,
+    "c4dEnvironmentColor": [
+      0,
+      0,
+      0
+    ],
+    "c4dAmbientBrightness": 0,
+    "floorColor": [
+      0.095,
+      0.105,
+      0.125
+    ],
+    "roomHalfExtent": 25,
+    "roomHeight": 20,
+    "c4dReflectionCardBrightness": 0,
+    "blenderExposure": 1.0,
+    "lightingDirection": "upper reverse-side, 120-degree horizontal separation from camera",
+    "c4dToneMapping": {
+      "preScale": 1.0,
+      "postScale": 1.0,
+      "burn": 0.3
+    },
+    "c4dPhysical": {
+      "samplerLevel": 3.5,
+      "shadingMin": 1.5,
+      "shadingMax": 3.5,
+      "shadingError": 0.05,
+      "blurryLevel": 3.5,
+      "giSamples": 96,
+      "giDepth": 2
+    },
+    "c4dFalloffDistance": 6.8,
+    "c4dFloorColor": [
+      0.09,
+      0.095,
+      0.105
+    ],
+    "c4dReflectionLightMultiplier": 4,
+    "c4dFloorReflectionStrength": 0.25
+  },
+  "materials": [
+    {
+      "id": "M001",
+      "name": "哑光陶瓷",
+      "english": "Matte ceramic",
+      "family": "dielectric",
+      "color": [
+        0.78,
+        0.76,
+        0.7
+      ],
+      "roughness": 0.7,
+      "metallic": 0,
+      "ior": 1.5,
+      "transmission": 0,
+      "coat": 0,
+      "c4dRoughness": 0.7,
+      "c4dDiffuseRoughness": 0,
+      "c4dReflectionStrength": 0.25
+    },
+    {
+      "id": "M002",
+      "name": "柔光塑料",
+      "english": "Satin polymer",
+      "family": "dielectric",
+      "color": [
+        0.1,
+        0.4,
+        0.67
+      ],
+      "roughness": 0.27,
+      "metallic": 0,
+      "ior": 1.46,
+      "transmission": 0,
+      "coat": 0.15,
+      "coatRoughness": 0.2,
+      "c4dRoughness": 0.23,
+      "c4dDiffuseRoughness": 0
+    },
+    {
+      "id": "M003",
+      "name": "镜面金属",
+      "english": "Polished metal",
+      "family": "metal",
+      "color": [
+        0.82,
+        0.84,
+        0.87
+      ],
+      "roughness": 0.065,
+      "metallic": 1,
+      "ior": 1.5,
+      "transmission": 0,
+      "coat": 0,
+      "c4dRoughness": 0.035,
+      "c4dDiffuseRoughness": 0
+    },
+    {
+      "id": "M004",
+      "name": "磨砂金属",
+      "english": "Satin metal",
+      "family": "metal",
+      "color": [
+        0.82,
+        0.84,
+        0.87
+      ],
+      "roughness": 0.4,
+      "metallic": 1,
+      "ior": 1.5,
+      "transmission": 0,
+      "coat": 0,
+      "c4dRoughness": 0.38,
+      "c4dDiffuseRoughness": 0
+    },
+    {
+      "id": "M005",
+      "name": "透明玻璃",
+      "english": "Clear glass",
+      "family": "glass",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "roughness": 0.015,
+      "metallic": 0,
+      "ior": 1.5,
+      "transmission": 1,
+      "coat": 0,
+      "attenuationColor": [
+        0.9,
+        0.97,
+        1
+      ],
+      "attenuationDistance": 4,
+      "c4dRoughness": 0.015,
+      "c4dTransmissionBlur": 0.015,
+      "c4dDiffuseRoughness": 0
+    },
+    {
+      "id": "M006",
+      "name": "磨砂玻璃",
+      "english": "Frosted glass",
+      "family": "glass",
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "roughness": 0.27,
+      "metallic": 0,
+      "ior": 1.5,
+      "transmission": 1,
+      "coat": 0,
+      "attenuationColor": [
+        0.9,
+        0.97,
+        1
+      ],
+      "attenuationDistance": 4,
+      "c4dRoughness": 0.32,
+      "c4dTransmissionBlur": 0.45,
+      "c4dDiffuseRoughness": 0
+    }
+  ]
+}

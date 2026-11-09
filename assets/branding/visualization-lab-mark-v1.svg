@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700" height="430" viewBox="0 0 700 430" role="img" aria-labelledby="title description">
+  <title id="title">可视化实验室 · 第一版 VL 标志</title>
+  <desc id="description">依据第一版左侧标志重绘。透明背景，独立可编辑路径与蓝青渐变，不含位图或字体。</desc>
+  <defs>
+    <path id="outline" fill-rule="evenodd" clip-rule="evenodd" d="M 92,234 C 82,235 76,244 78,255 C 79,260 82,266 86,274 L 212,517 C 219,531 223,537 229,541 C 233,544 238,545 246,545 L 617,542 C 625,542 629,540 635,533 L 713,450 C 719,444 721,438 716,433 C 713,429 709,427 703,427 L 644,425 L 644,225 C 644,218 642,214 637,211 L 523,166 C 515,162 510,164 502,167 L 371,226 C 364,229 361,232 358,239 L 301,365 L 242,252 C 237,242 232,236 222,235 C 185,234 121,234 92,234 Z M 533,251 L 498,267 C 493,269 489,274 486,282 L 411,464 L 533,422 Z"/>
+    <clipPath id="mark-clip"><use xlink:href="#outline"/></clipPath>
+    <linearGradient id="foot-color" gradientUnits="userSpaceOnUse" x1="392" y1="523" x2="692" y2="439">
+      <stop offset="0" stop-color="#04acd9"/>
+      <stop offset="0.42" stop-color="#07d4f0"/>
+      <stop offset="1" stop-color="#09eefb"/>
+    </linearGradient>
+    <linearGradient id="upright-color" gradientUnits="userSpaceOnUse" x1="552" y1="253" x2="641" y2="420">
+      <stop offset="0" stop-color="#06a7c5"/>
+      <stop offset="0.5" stop-color="#0bbbd6"/>
+      <stop offset="1" stop-color="#1bcde5"/>
+    </linearGradient>
+    <linearGradient id="left-V-color" gradientUnits="userSpaceOnUse" x1="123" y1="235" x2="270" y2="531">
+      <stop offset="0" stop-color="#0053e5"/>
+      <stop offset="0.57" stop-color="#004ed5"/>
+      <stop offset="1" stop-color="#0047c5"/>
+    </linearGradient>
+    <linearGradient id="right-V-color" gradientUnits="userSpaceOnUse" x1="405" y1="255" x2="320" y2="544">
+      <stop offset="0" stop-color="#289bf8"/>
+      <stop offset="0.36" stop-color="#2d9cf9"/>
+      <stop offset="0.72" stop-color="#1583ec"/>
+      <stop offset="1" stop-color="#0052d6"/>
+    </linearGradient>
+    <radialGradient id="right-V-light" gradientUnits="userSpaceOnUse" cx="306" cy="361" r="172" gradientTransform="translate(0 -35) scale(1 1.1)">
+      <stop offset="0" stop-color="#61bcff" stop-opacity=".27"/>
+      <stop offset="1" stop-color="#61bcff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="front-V-color" gradientUnits="userSpaceOnUse" x1="303" y1="367" x2="315" y2="544">
+      <stop offset="0" stop-color="#309af6"/>
+      <stop offset="0.43" stop-color="#167ded"/>
+      <stop offset="1" stop-color="#004cd2"/>
+    </linearGradient>
+    <linearGradient id="top-color" gradientUnits="userSpaceOnUse" x1="373" y1="224" x2="621" y2="211">
+      <stop offset="0" stop-color="#8ae5fa"/>
+      <stop offset="0.47" stop-color="#5bcae9"/>
+      <stop offset="1" stop-color="#32b8de"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(-48 -138)">
+    <g clip-path="url(#mark-clip)">
+      <use xlink:href="#outline" fill="url(#foot-color)"/>
+      <path id="L-upright" fill="url(#upright-color)" d="M 533,251 L 637,211 Q 644,216 644,225 L 644,425 L 533,422 Z"/>
+      <path id="L-foot" fill="url(#foot-color)" d="M 411,464 L 533,422 L 703,427 Q 729,430 713,450 L 635,533 Q 627,543 617,542 L 360,546 Z"/>
+      <path id="V-left-arm" fill="url(#left-V-color)" d="M 92,234 L 216,234 Q 232,234 242,252 L 381,518 Q 391,540 366,545 L 244,545 Q 229,545 220,532 L 83,267 Q 68,240 92,234 Z"/>
+      <path id="V-right-arm" fill="url(#right-V-color)" d="M 368,228 L 498,268 Q 491,271 486,282 L 382,528 Q 376,544 360,545 L 242,546 Q 230,546 223,539 L 358,239 Q 361,232 368,228 Z"/>
+      <path id="V-surface-light" fill="url(#right-V-light)" d="M 368,228 L 498,268 Q 491,271 486,282 L 382,528 Q 376,544 360,545 L 242,546 Q 230,546 223,539 L 358,239 Q 361,232 368,228 Z"/>
+      <path id="V-front-fold" fill="url(#front-V-color)" d="M 301,365 L 381,518 Q 390,539 369,544 L 244,545 Q 230,545 223,539 Z"/>
+      <path id="top-fold" fill="url(#top-color)" d="M 368,228 L 502,167 Q 514,161 523,166 L 637,211 L 498,268 Z"/>
+    </g>
+  </g>
+</svg>

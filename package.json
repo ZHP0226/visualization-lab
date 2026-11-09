@@ -1,0 +1,33 @@
+{
+  "name": "visualization-workbench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "面向各种可视化表达的本地创作工作台",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "package": "node scripts/package.mjs",
+    "setup:runtime": "node node_modules/esbuild/install.js && node node_modules/electron/install.js",
+    "dev": "node scripts/dev.cjs",
+    "test:ui": "node tests/ui-smoke.mjs"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "electron": "45.2.1",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1"
+  },
+  "license": "MIT",
+  "author": "ZHP0226",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZHP0226/visualization-lab.git"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

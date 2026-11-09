@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; font-src 'self'; object-src 'none'; base-uri 'none'">
+  <title>可视化实验室 · 工作台</title>
+  <script src="./startup-boot.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./presentation.css">
+  <link rel="stylesheet" href="./projects.css">
+  <link rel="stylesheet" href="./chat.css">
+  <link rel="stylesheet" href="./point-edit.css">
+  <link rel="stylesheet" href="./liquid-glass.css">
+  <link rel="stylesheet" href="./appearance.css">
+  <link rel="stylesheet" href="./startup.css">
+  <link rel="stylesheet" href="./fluid-motion.css">
+  <link rel="stylesheet" href="./usage-statistics.css">
+</head>
+<body>
+  <div id="workbench-shell" inert>
+  <svg class="icon-sprite" aria-hidden="true"><defs>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z M3 8l9 5 9-5 M12 13v8 M7.5 5.5l9 5"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5a1 1 0 0 1 1-1h5l2 3h9a1 1 0 0 1 1 1v11H3V7Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8l-5-5Z M14 3v5h5 M8 13h8 M8 17h5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M8 5 18 12 8 19Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 9a8 8 0 1 0-1 9 M20 3v6h-6"/></symbol>
+    <symbol id="i-focus" viewBox="0 0 24 24"><path d="M8 3H3v5 M16 3h5v5 M21 16v5h-5 M8 21H3v-5"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18 M15 3v18 M3 9h18 M3 15h18"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18 M10.5 5A11 11 0 0 1 22 12a17 17 0 0 1-3 4 M6 6a17 17 0 0 0-4 6s3.5 7 10 7a11 11 0 0 0 5-1 M10 10a3 3 0 0 0 4 4"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8l10-5Z M2 12l10 5 10-5 M2 16l10 5 10-5"/></symbol>
+    <symbol id="i-mouse" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="6"/><path d="M12 3v6"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3 M7 8l5-5 5 5 M4 15v6h16v-6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12 M6 18 18 6"/></symbol>
+    <symbol id="i-max" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24"><path d="m5 3 14 9-7 1-3 7-4-17Z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6L12 2Z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="m10 13 4-4 M9 16l-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0 M15 8l2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" transform="translate(1 0) scale(.9)"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9 3 6 0 1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs></svg>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="ambient ambient-three"></div>
+  <header class="titlebar">
+    <div class="brand"><img class="brand-logo" src="./branding/visualization-lab-logo-v1.svg" alt="可视化实验室 · Visualization Lab" width="258" height="86" draggable="false"><span class="version">1.0.0</span></div>
+    <div class="titlebar-actions"><span class="local-status"><i></i> 本地工作台</span><button id="open-settings" class="icon-button" aria-label="打开设置" title="设置"><svg><use href="#i-settings"/></svg></button><button id="open-file" class="button primary"><svg><use href="#i-plus"/></svg>打开模型</button><div class="window-actions"><button data-window="minimize" aria-label="最小化"><svg><use href="#i-minus"/></svg></button><button data-window="maximize" aria-label="最大化或还原"><svg><use href="#i-max"/></svg></button><button data-window="close" aria-label="关闭工作台"><svg><use href="#i-close"/></svg></button></div></div>
+  </header>
+  <main class="workspace">
+    <aside id="file-panel" class="panel file-panel glass" aria-label="本机项目管理">
+      <div class="panel-heading"><div><span class="eyebrow">PROJECTS</span><h1>本机项目</h1></div><button id="refresh" class="icon-button" aria-label="刷新项目与文件" data-tip="刷新"><svg><use href="#i-refresh"/></svg></button></div>
+      <button id="go-home" class="folder-button home-button" aria-current="page"><svg><use href="#i-spark"/></svg><span>创意首页</span></button>
+      <div class="project-actions">
+      <button id="add-project" class="folder-button add-project"><svg><use href="#i-plus"/></svg><span>添加项目</span></button>
+      <button id="open-folder" class="folder-button open-project" aria-label="打开项目"><svg><use href="#i-folder"/></svg><span>打开项目</span><span class="shortcut" aria-hidden="true">↗</span></button>
+      </div>
+      <div class="library-location"><span id="root-name">示例模型库</span><span id="file-count"></span></div>
+      <nav id="file-tree" class="tree-scroll" aria-label="项目、模型与成图"></nav>
+      <div class="library-footer"><svg><use href="#i-link"/></svg><span id="project-summary">模型与成图按相同前缀对应</span><div class="format-list"><span>GLB</span><span>glTF</span><span>FBX</span><span>OBJ</span><span>PNG / JPG</span></div></div>
+    </aside>
+    <div class="layout-divider vertical-divider" id="resize-projects" data-resize-panel="left" role="separator" tabindex="0" aria-label="调整项目栏宽度" aria-orientation="vertical" aria-controls="file-panel" title="拖动调整宽度；方向键微调，Shift加快；双击复位"></div>
+    <div id="center-column" class="center-column">
+    <section class="viewport-panel" data-presentation="structure" data-screen="home" aria-label="创意与三维模型视窗">
+      <div id="welcome-screen" class="welcome-screen"><img src="./branding/visualization-lab-mark-v1.svg" alt="可视化实验室 VL 标志" width="150" height="92" draggable="false"><h2 id="welcome-title">今天您有什么创意</h2><p id="welcome-description">从下方开始对话，或在左侧选择一个项目</p></div>
+      <div class="viewport-top"><div class="model-breadcrumb"><svg><use href="#i-cube"/></svg><span id="model-name">正在准备视窗</span><span id="model-format" class="format-tag">GLB</span></div><div class="presentation-switch glass" role="group" aria-label="展示模式"><button data-presentation="structure" aria-pressed="true">结构</button><button data-presentation="render" aria-pressed="false" disabled>成图</button><button data-presentation="reference" aria-pressed="false" disabled>参考</button><button data-presentation="compare" aria-pressed="false" disabled>对照</button></div></div>
+      <div id="viewport" class="viewport" tabindex="0" aria-label="三维视图，拖动旋转，滚轮缩放，点击选择部件；F 聚焦，Escape 取消选择"><canvas id="scene-canvas"></canvas></div>
+      <div id="empty-project" class="empty-project" hidden><svg><use href="#i-folder"/></svg><strong>项目已准备好</strong><span>从左侧“模型”和“成片”导入文件</span><span>相同前缀自动对应，也可点击链接图标手动指定</span></div>
+      <span class="structure-view-label">三维结构 · 可旋转、选择</span>
+      <figure id="render-pane" class="render-pane" hidden><figcaption>成图<span>滚轮缩放 · 放大后拖动</span><button id="reset-render-zoom" type="button" class="text-button" aria-label="复位成图缩放">适配</button></figcaption><div class="render-image-wrap"><img id="final-render" alt="当前模型的最终渲染成图" draggable="false"><span id="point-edit-marker" hidden aria-hidden="true"></span><span id="render-empty" class="image-empty" hidden>暂无成图</span></div></figure>
+      <figure id="reference-pane" class="render-pane reference-pane" hidden><figcaption><span id="reference-caption-title">参考</span><select id="reference-select" aria-label="选择参考图片"></select><button id="reset-reference-zoom" type="button" class="text-button" aria-label="复位参考缩放">适配</button></figcaption><div class="render-image-wrap"><img id="reference-render" alt="当前参考图片" draggable="false"><span id="reference-point-marker" hidden aria-hidden="true"></span><span id="reference-empty" class="image-empty">暂无参考</span></div></figure><span id="structure-empty" class="structure-empty" hidden>暂无结构模型</span>
+      <div id="loading" class="loading-overlay" hidden><div class="glass loading-card"><span class="spinner"></span><span id="loading-text">正在加载模型</span></div></div>
+      <div id="drop-zone" class="drop-zone" hidden><div><svg><use href="#i-upload"/></svg><strong>松开以打开模型</strong><span>GLB · glTF · FBX · OBJ 或文件夹</span></div></div>
+      <div class="viewport-toolbar glass" role="toolbar" aria-label="视图工具"><button id="fit" class="tool-button" data-tip="适配全部 · F"><svg><use href="#i-focus"/></svg><span>适配</span></button><span class="toolbar-divider"></span><button class="view-button active" data-view="perspective" aria-pressed="true">透视</button><button class="view-button" data-view="front" aria-pressed="false">正面</button><button class="view-button" data-view="top" aria-pressed="false">俯视</button><span class="toolbar-divider"></span><button id="grid" class="tool-button active" aria-pressed="true" data-tip="显示地面网格"><svg><use href="#i-grid"/></svg><span>网格</span></button></div>
+      <div class="viewport-bottom"><div class="interaction-guide"><svg><use href="#i-mouse"/></svg><span>拖动旋转</span><i></i><span>滚轮缩放</span><i></i><span>右键平移</span></div><div id="model-stats">准备中</div></div>
+    </section>
+    <div class="layout-divider horizontal-divider" id="resize-chat" data-resize-panel="chat" role="separator" tabindex="0" aria-label="调整对话区高度" aria-orientation="horizontal" aria-controls="chat-panel" title="拖动调整高度；方向键微调，Shift加快；双击复位"></div>
+    <section id="chat-panel" class="chat-panel glass" aria-labelledby="chat-title">
+      <div class="chat-controls">
+      <div class="chat-heading"><h2 id="chat-title"><svg><use href="#i-spark"/></svg><span id="agent-title">AI 助手</span><span class="full-access" title="使用所选本机 agent 的执行能力，工作台交付规范继续生效">本机 Agent</span></h2><div class="chat-connection"><label class="visually-hidden" for="agent-select">选择 AI 连接</label><select id="agent-select" aria-label="选择 AI 连接" disabled><option value="">正在检测…</option></select><button id="agent-refresh" class="icon-button" aria-label="重新检测本机 Agent" title="重新检测本机 Agent"><svg><use href="#i-refresh"/></svg></button><span id="chat-status" role="status" data-state="connecting">正在检测</span><button id="chat-connect" class="text-button" type="button" hidden>重新连接</button></div></div>
+      <div class="chat-settings"><label for="codex-model">模型<select id="codex-model" aria-label="选择 AI 模型" disabled><option value="">沿用本机配置</option></select></label><label for="agent-effort">思考强度<select id="agent-effort" aria-label="选择思考强度" disabled><option value="">沿用本机配置</option></select></label><button id="open-ai-connections" type="button" class="text-button">AI 接入</button></div>
+      <div class="chat-history-bar"><button id="chat-new" type="button" class="text-button" disabled>＋ 新聊天</button><label class="visually-hidden" for="chat-thread">历史聊天</label><select id="chat-thread" aria-label="历史聊天" disabled><option>正在读取聊天…</option></select><span id="chat-save-status" role="status" aria-live="polite"></span></div>
+      </div>
+      <div id="chat-messages" class="chat-messages" role="log" aria-label="与本机 Agent 的对话" aria-live="off"><p id="chat-welcome" class="chat-welcome">在这里，把创意变成可以查看的结构</p></div>
+      <span id="chat-announcement" class="visually-hidden" role="status" aria-live="polite"></span>
+      <details id="edit-notes-menu" class="edit-notes-menu"><summary><span>修改意见</span><span id="edit-notes-count">0 条</span><span class="disclosure-triangle" aria-hidden="true"></span></summary><div id="edit-notes-list" class="edit-notes-list" aria-label="修改意见列表"></div></details>
+      <p id="edit-notes-error" class="edit-notes-error" role="alert"></p>
+      <form id="chat-form" class="chat-composer"><label for="chat-input" class="visually-hidden">发送给 AI 的消息</label><textarea id="chat-input" rows="2" maxlength="12000" placeholder="描述想生成的图片、模型或修改…" spellcheck="false"></textarea><div class="chat-composer-footer"><span id="chat-model-context" title="Enter 发送 · Shift + Enter 换行">未关联项目模型 · 可直接对话</span><button id="chat-stop" type="button" class="button" hidden>停止生成</button><button id="chat-send" type="submit" class="button primary" disabled>发送 <span aria-hidden="true">↑</span></button></div></form>
+      <div id="creation-options" class="creation-options" aria-label="创作选项"></div>
+      <p id="creation-options-error" class="creation-options-error" role="alert"></p>
+    </section>
+    </div>
+    <div class="layout-divider vertical-divider" id="resize-structure" data-resize-panel="right" role="separator" tabindex="0" aria-label="调整结构栏宽度" aria-orientation="vertical" aria-controls="structure-panel" title="拖动调整宽度；方向键微调，Shift加快；双击复位"></div>
+    <aside id="structure-panel" class="panel structure-panel glass" aria-label="模型结构树">
+      <div class="panel-heading"><div><span class="eyebrow">SCENE</span><h2>结构树</h2></div><span id="structure-count" class="count-badge">0</span></div>
+      <div class="structure-caption"><svg><use href="#i-layers"/></svg><span>点击部件，在视图中高亮</span></div>
+      <nav id="structure-tree" class="tree-scroll" aria-label="模型分组与独立部件"></nav>
+      <section class="selection-panel"><div class="selection-heading"><span class="eyebrow">SELECTION</span><button id="clear-selection" class="text-button" disabled>取消选择</button></div><div id="selection-empty"><div class="selection-icon"><svg><use href="#i-cursor"/></svg></div><p>探索每一个结构</p><span>在模型或结构树中选择一个部件</span></div><div id="selection-info" hidden><div class="selected-name"><span class="selection-dot"></span><strong id="selected-name"></strong></div><dl><div><dt>对象类型</dt><dd id="selected-type"></dd></div><div><dt>包含网格</dt><dd id="selected-meshes"></dd></div><div><dt>三角面</dt><dd id="selected-triangles"></dd></div></dl><div class="selection-actions"><button id="focus-selected" class="button"><svg><use href="#i-focus"/></svg>聚焦</button><button id="isolate" class="button"><svg><use href="#i-eye"/></svg>单独显示</button></div></div><button id="show-all" class="text-button show-all" hidden>恢复全部显示</button></section>
+    </aside>
+  </main>
+  <footer class="statusbar"><span><i class="status-dot"></i><span id="status-text" role="status" aria-live="polite">正在启动</span></span><span>模型与成图保存在本机<span class="status-separator">/</span><kbd>F</kbd> 聚焦<span class="status-separator">/</span><kbd>Esc</kbd> 取消选择</span></footer>
+  <div id="toast" class="toast glass" role="alert" hidden><span></span><button class="icon-button" aria-label="关闭提示"><svg><use href="#i-close"/></svg></button></div>
+  <dialog id="project-dialog" class="project-dialog glass" aria-labelledby="project-dialog-title"><form id="project-form"><div class="dialog-heading"><h2 id="project-dialog-title">添加本机项目</h2><button type="button" class="icon-button" id="close-project-dialog" aria-label="取消添加项目"><svg><use href="#i-close"/></svg></button></div><label>项目名称<input id="project-name" required maxlength="64" autocomplete="off" placeholder="例如：第0期"></label><label>保存位置<div class="directory-field"><input id="project-parent" required readonly placeholder="选择本机目录"><button type="button" id="choose-project-directory" class="button">选择目录</button></div></label><p class="dialog-hint">在所选位置新建同名项目目录。“参考”“模型”“成片”为虚拟分组，文件保存在项目目录中。</p><p id="project-dialog-error" class="dialog-error" role="alert" hidden></p><button type="submit" class="button primary" id="confirm-project">创建项目</button></form></dialog>
+  <dialog id="pair-dialog" class="project-dialog glass" aria-labelledby="pair-dialog-title"><form id="pair-form"><div class="dialog-heading"><h2 id="pair-dialog-title">设置参考、模型与成图对应</h2><button type="button" class="icon-button" id="close-pair-dialog" aria-label="取消设置对应"><svg><use href="#i-close"/></svg></button></div><label>模型<select id="pair-model" required></select></label><label>对应成图<select id="pair-render"></select></label><fieldset class="reference-associations"><legend>对应参考（可多选）</legend><div id="pair-references"></div></fieldset><p class="dialog-hint">一个模型可使用多张参考，同一参考可供多个模型使用。渲染成图仍与具体模型一一对应，参考不会充当模型成图。</p><p id="pair-dialog-error" class="dialog-error" role="alert" hidden></p><button type="submit" class="button primary" id="confirm-pair">保存对应</button></form></dialog>
+  <dialog id="point-edit-dialog" aria-labelledby="point-edit-title" aria-describedby="point-edit-target">
+    <form id="point-edit-form">
+      <h2 id="point-edit-title">修改这一处</h2><p id="point-edit-target"></p>
+      <label for="point-edit-input">您想怎样修改？</label>
+      <textarea id="point-edit-input" rows="3" maxlength="3000" placeholder="例如：把这个单元改成三角形，保留原来的位置与材质"></textarea>
+      <p id="point-edit-error" role="alert"></p>
+      <p class="point-edit-hint">Enter 完成 · Shift + Enter 换行<br>保存到“修改意见”，最后统一点击对话框中的发送。</p>
+      <div class="point-edit-footer"><button id="point-edit-cancel" type="button" class="button">取消</button><button type="submit" class="button primary">完成 ↓</button></div>
+    </form>
+  </dialog>
+  <dialog id="settings-dialog" class="project-dialog settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading"><h2 id="settings-title">设置</h2><button id="close-settings" class="icon-button" type="button" aria-label="关闭设置"><svg><use href="#i-close"/></svg></button></div>
+    <section class="settings-section"><h3>布局</h3><p id="settings-layout-summary" class="settings-description"></p><p class="settings-description">拖动栏位之间的分隔线调整大小，双击分隔线可单独复位。</p><button id="reset-workspace-layout" class="button" type="button">恢复默认布局</button></section>
+    <section class="settings-section"><h3>外观</h3><label class="settings-row" for="settings-theme"><span>界面模式</span><select id="settings-theme"><option value="light">浅色</option><option value="dark">深色 · 黑色金属</option></select></label><div class="settings-font-heading"><label for="settings-font-size">字体大小</label><output id="settings-font-value" for="settings-font-size">100%</output><button id="reset-font-size" type="button" class="text-button">恢复默认</button></div><input id="settings-font-size" class="font-size-slider" type="range" min="80" max="140" step="5" value="100" aria-describedby="settings-font-hint"><p id="settings-font-hint" class="settings-description">拖动滑杆实时调整所有界面文字，100% 为默认大小。</p></section>
+    <section class="settings-section"><h3>显示与动效</h3><label class="settings-row"><span>玻璃边缘折射<small>关闭后减少图形开销</small></span><input id="settings-refraction" type="checkbox"></label><label class="settings-row" for="settings-motion"><span>界面动效</span><select id="settings-motion"><option value="system">跟随系统</option><option value="reduced">减少动效</option></select></label></section>
+    <section class="settings-section"><h3>AI 连接</h3><p class="settings-description">配置 API 服务，或手动指定本机 AI 程序。</p><button id="settings-ai-connections" class="button" type="button">AI 接入</button></section>
+    <section class="settings-section"><h3>三维辅助</h3><label class="settings-row"><span>显示网格</span><input id="settings-grid" type="checkbox"></label><label class="settings-row"><span>显示坐标轴</span><input id="settings-axes" type="checkbox"></label></section>
+    <div class="settings-about"><span>可视化工作台 1.0.0</span><span><kbd>F</kbd> 聚焦 · <kbd>Esc</kbd> 取消选择</span></div><p id="settings-save-status" class="settings-description" role="status">调整会自动保存在本机</p><p id="settings-error" role="alert"></p>
+  </dialog>
+  <dialog id="ai-connections-dialog" class="project-dialog ai-connections-dialog" aria-labelledby="ai-connections-title">
+    <form id="ai-config-form">
+      <div class="dialog-heading"><h2 id="ai-connections-title">AI 接入</h2><button id="close-ai-connections" class="icon-button" type="button" aria-label="关闭 AI 接入">×</button></div>
+      <label>接入方式<select id="ai-connection-kind"><option value="api">API · OpenAI 兼容接口</option><option value="local">本机 AI · 手动指定程序</option></select></label>
+      <fieldset id="ai-api-fields">
+        <label>连接<select id="ai-api-profile"><option value="">新增 API 连接</option></select></label>
+        <label>连接名称<input id="ai-api-name" required maxlength="60" autocomplete="off" placeholder="例如：我的 API"></label>
+        <label>服务地址<input id="ai-api-url" type="url" required autocomplete="off" spellcheck="false" placeholder="https://服务地址/v1"></label>
+        <label>API Key<input id="ai-api-key" type="password" autocomplete="new-password" spellcheck="false" maxlength="8000" placeholder="填写 API Key；本地服务可留空"></label>
+        <label class="ai-check"><input id="ai-api-clear-key" type="checkbox">清除已保存的密钥</label>
+        <label>模型 ID<input id="ai-api-model" maxlength="150" list="ai-model-options" autocomplete="off" spellcheck="false" placeholder="手填模型 ID，或先读取模型列表"><datalist id="ai-model-options"></datalist></label>
+        <button id="ai-api-test" class="button" type="button">读取模型 / 测试连接</button>
+        <label class="ai-check"><input id="ai-api-tools" type="checkbox">允许此 API 执行本机任务</label>
+        <p class="dialog-hint">启用后，AI 可读写项目文件并运行本机程序来建模、渲染；模型需支持工具调用。未启用时用于文本对话。密钥加密保存在本机。</p>
+      </fieldset>
+      <fieldset id="ai-local-fields" hidden disabled>
+        <label>本机 AI 类型<select id="ai-local-type"><option value="codex">Codex</option><option value="claude">Claude Code</option><option value="gemini">Gemini CLI</option><option value="opencode">OpenCode</option></select></label>
+        <label>程序路径<div class="ai-program-field"><input id="ai-local-path" required autocomplete="off" spellcheck="false" placeholder="选择程序本体或 npm 启动脚本"><button id="ai-local-browse" class="button" type="button">浏览…</button></div></label>
+        <label>启动前置参数（JSON 数组）<input id="ai-local-args" autocomplete="off" spellcheck="false" value="[]"></label>
+        <p class="dialog-hint">支持 Codex、Claude Code、Gemini CLI 与 OpenCode 的原生协议。通常参数保留 []；使用 node.exe 启动时，可填写 ["脚本完整路径"]。登录与模型仍沿用该程序的配置。</p>
+      </fieldset>
+      <p id="ai-config-status" role="status" aria-live="polite"></p>
+      <div class="ai-config-actions"><button id="ai-config-remove" class="text-button" type="button" hidden>删除此连接</button><button id="ai-config-cancel" class="button" type="button">取消</button><button id="ai-config-save" class="button primary" type="submit">保存并连接</button></div>
+    </form>
+  </dialog>
+  <div id="sidebar-menu" class="sidebar-menu" role="menu" aria-label="项目与文件操作" hidden></div>
+  <dialog id="sidebar-operation-dialog" class="project-dialog" aria-labelledby="sidebar-operation-title"><form id="sidebar-operation-form"><div class="dialog-heading"><h2 id="sidebar-operation-title"></h2><button id="sidebar-operation-close" class="icon-button" type="button" aria-label="关闭文件操作">×</button></div><p id="sidebar-operation-description"></p><label id="sidebar-name-field">新名称<input id="sidebar-new-name" required maxlength="80" autocomplete="off" spellcheck="false"></label><ul id="sidebar-operation-files" class="sidebar-operation-files"></ul><p id="sidebar-operation-error" role="alert"></p><div class="sidebar-operation-actions"><button id="sidebar-operation-cancel" class="button" type="button">取消</button><button id="sidebar-operation-confirm" class="button primary" type="submit"></button></div></form></dialog>
+  </div>
+  <div id="startup-overlay" role="region" aria-label="可视化实验室开场动画"></div>
+  <script type="module" src="./renderer.js"></script>
+  <script type="module" src="./usage-statistics-ui.js"></script>
+</body>
+</html>

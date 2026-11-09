@@ -1,0 +1,14 @@
+# Local OBJ sample
+mtllib 几何示例.mtl
+o 四棱锥
+v -1 0 -1
+v 1 0 -1
+v 1 0 1
+v -1 0 1
+v 0 1.8 0
+usemtl Porcelain
+f 1 2 5
+f 2 3 5
+f 3 4 5
+f 4 1 5
+f 4 3 2 1

@@ -1,0 +1,173 @@
+{
+  "resolution": [
+    960,
+    640
+  ],
+  "lightSamples": 16,
+  "materials": {
+    "01 Brushed Silver Frame": {
+      "tint": [
+        1,
+        1,
+        1
+      ],
+      "roughness": 0.21,
+      "bump": 0.0003,
+      "samples": 2.5,
+      "specular": 0,
+      "diffuse": 0.2,
+      "reflection": 0.8,
+      "displayColor": [
+        0.73,
+        0.74,
+        0.76
+      ]
+    },
+    "02 Champagne Gold Die": {
+      "displayColor": [
+        0.86,
+        0.64,
+        0.39
+      ],
+      "tint": [
+        1,
+        1,
+        0.96
+      ],
+      "roughness": 0.2,
+      "bump": 0.00025,
+      "samples": 2.5,
+      "coloredSpecular": false,
+      "metal": "COPPER",
+      "specular": 0.03,
+      "diffuse": 0.26,
+      "reflection": 0.72
+    },
+    "03 Polished Gold Edges": {
+      "displayColor": [
+        0.86,
+        0.65,
+        0.4
+      ],
+      "tint": [
+        1,
+        0.91,
+        0.83
+      ],
+      "roughness": 0.18,
+      "samples": 2.5,
+      "coloredSpecular": false,
+      "metal": "GOLD",
+      "specular": 0.03,
+      "diffuse": 0
+    },
+    "04 Fine Gold Conductors": {
+      "displayColor": [
+        0.9,
+        0.72,
+        0.47
+      ],
+      "tint": [
+        0.99,
+        1,
+        0.9
+      ],
+      "roughness": 0.18,
+      "samples": 2.5,
+      "coloredSpecular": false,
+      "specular": 0.04,
+      "metal": "COPPER"
+    },
+    "05 Black Ceramic Base": {
+      "bump": 0.0006
+    },
+    "06 Recessed Graphite Substrate": {
+      "bump": 0.0009
+    },
+    "07 Dark Satin Studio Floor": {
+      "displayColor": [
+        0.14,
+        0.14,
+        0.14
+      ],
+      "bump": 0.0003,
+      "roughness": 0.65,
+      "reflection": 0.08,
+      "samples": 2.5,
+      "luminance": [
+        0.11,
+        0.108,
+        0.106
+      ],
+      "diffuse": 0.22
+    }
+  },
+  "lights": {
+    "KEY - large softbox upper left": {
+      "power": 0.95,
+      "position": [
+        -95,
+        70,
+        -120
+      ],
+      "size": [
+        80,
+        65
+      ]
+    },
+    "SIDE - broad silver reflection": {
+      "power": 0.3
+    },
+    "FILL - right wall reflection": {
+      "power": 0.25
+    }
+  },
+  "cards": {
+    "Key diffusion panel": {
+      "brightness": 1.2
+    },
+    "Left reflection panel": {
+      "brightness": 1.15
+    },
+    "Right reflection panel": {
+      "brightness": 0.72
+    }
+  },
+  "environment": 0.45,
+  "materialGroups": [
+    {
+      "source": "02 Champagne Gold Die",
+      "name": "11 Warm gold array facets",
+      "objectPrefix": "Gold block C",
+      "displayColor": [
+        0.88,
+        0.5,
+        0.05
+      ],
+      "tint": [
+        1,
+        0.99,
+        0.65
+      ],
+      "roughness": 0.14,
+      "bump": 0.0002,
+      "coloredSpecular": false,
+      "metal": "COPPER",
+      "specular": 0.32,
+      "diffuse": 0.18,
+      "reflection": 0.95
+    }
+  ],
+  "hideStudioObjects": [
+    "Plain dark back wall"
+  ],
+  "studioObjects": {
+    "Continuous dark satin ground": {
+      "size": [
+        20000,
+        4,
+        20000
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "version": "1.1.0",
+  "inputMode": "text-only",
+  "defaultStyleId": "nature-scientific",
+  "workflow": [
+    "用户明确要求生成、设计或编辑图片时，默认使用本库整理实际生图提示词；不需要用户手动启用。用户只是询问能力、讨论方案或要求提示词时，分别回答或交付提示词，不自行启动生图。",
+    "用户没有指定风格时默认采用 Nature 科研插图。用户明确要求科普插画、科技封面或其他画风时，选择对应方案或按用户自定义风格设计；用户对主体、结构、配色、背景、文字语言和构图的明确要求始终优先，不能被预设覆盖。多方案请求分别处理。",
+    "本库只有文字规则，不含期刊图片、图片索引或本机图库路径。不得为了使用 Nature 风格扫描、读取或上传本机期刊参考图库。用户明确指定的任务原图、既有成图与局部修改定位仍按原有规则处理。",
+    "先明确任务要表达的关系，再选择构图。科学输入中的层序、接触、数量、输入输出方向与给定数据优先于美化。缺少真实坐标时采用明确的示意结构，不编造精确晶格、仿真场图、测量结果或性能结论。",
+    "把用户任务与选中方案组合成完整提示词：用途、主体与不可变结构、关系与方向、布局、视角、颜色身份、材质、光照、背景、文字和排除项。替换所有通用描述，不发送空占位符，不只写 Nature 风格或高质量等形容词。",
+    "论文插图默认生成无字主体并预留标注空间；需要标签时默认使用准确简短的英文，复杂公式和精确排版留给后续标注。用户明确要求中文、其他语言或图中文字时按其要求完成，不能擅自省略。非论文用途不强制套用论文文字规则。",
+    "实际生成前确认当前 Agent 是否具备可用的图像生成或图像编辑工具。具备时按用户要求调用并查看实际结果，核对结构、遮挡、颜色身份、文字与可读性；需要修正时保留已正确部分。",
+    "没有可用生图工具时，如实说明本轮没有生成图片，并提供可复制的任务提示词；不把文字、旧图、网页截图、占位图或三维视窗截图冒充新生成结果，不自行配置收费接口或安装软件。",
+    "只渲染已有三维模型、调整模型材质灯光或执行已有模型定位意见时，继续操作原工程与当前模型，不因本库存在就重新生图。用户已有认可参考且直接要求建模时，不重新生成参考。",
+    "纯生图或写提示词不需要选择 Blender/C4D。只有进入实际建模、导出或渲染阶段才执行原有软件选择规则。独立概念参考不是模型的真实渲染：不为参考图复制 GLB、保存原工程、增加模型版本或自动替换模型配对成图；没有配对模型的图片修改默认再次生图，生成PNG按独立图片规则登记预览；用户明确据图建模时先拆解再按框架建模，后续制作遵守交付规则。",
+    "这些方案是视觉表达方法，不是期刊认证、投稿合规保证、专属训练模型或物理仿真。内部规则、方案 JSON 和包装提示词不回显到用户聊天；用户明确索要提示词或缺少生图工具时，可展示整理后的任务提示词。"
+  ],
+  "styles": [
+    {
+      "id": "nature-scientific",
+      "name": "Nature 科研插图",
+      "useWhen": "默认方案；论文概念图、光学机制、层状材料、科研器件和阵列结构示意。",
+      "prompt": "Create a clear scientific concept illustration that explains the supplied scientific relationship. Preserve the specified components, layer order, contacts, counts, and mechanism directions. Choose a composition that reveals the important interface: a single structure, cutaway or exploded layers, an array with a corresponding unit inset, a matched-view comparison, a fabrication sequence, or an optical system as appropriate. Use consistent identity colors, restrained material contrast, readable silhouettes, controlled reflections and soft lighting. Start from a clean light background and orthographic or weak-perspective view when suitable; honor any explicitly requested background and perspective. Leave calm space for annotations without empty label boxes. Keep visual emphasis on the scientific subject. Do not invent quantitative data or imply that illustrative glows are simulated fields.",
+      "checks": [
+        "主对象与关键接口清楚，层序、接触和输入输出方向正确。",
+        "材料身份色一致，局部放大与实际主体对应；对比图保持共同视角和尺度。",
+        "透明度、阴影与反光帮助说明结构，不能遮挡关键信息。",
+        "缩小后仍可辨认主体和标签；遵循用户指定的画幅与语言。"
+      ]
+    },
+    {
+      "id": "science-explainer",
+      "name": "科普插画",
+      "useWhen": "用户要求科普插画、面向大众的解释图或简化讲解画面时使用。",
+      "prompt": "Create an approachable science explainer illustration for the stated audience. Establish one clear subject and a simple reading sequence. Make the mechanism understandable through recognizable components, distinct functional colors, a small number of purposeful arrows, and one relevant close-up if needed. Simplify secondary details while preserving the actual scientific relationship and explicitly specified structure. Use readable shapes, gentle depth, soft illumination and a background that supports contrast. Follow the requested degree of realism or stylization, aspect ratio and text language. Avoid visual clutter, decorative pseudo-data and misleading cause-and-effect arrows.",
+      "checks": [
+        "非专业读者能看出主体、作用位置和过程方向。",
+        "简化不改变科学含义；解释箭头与标签引线不混用。",
+        "主体和文字在短视频或手机预览尺寸下清楚，留白符合用途。"
+      ]
+    },
+    {
+      "id": "technology-cover",
+      "name": "科技封面",
+      "useWhen": "用户明确要求科技封面、科研宣传海报或产品展示主视觉时使用。",
+      "prompt": "Create a striking technology cover image around the supplied device or scientific subject. Give the main structure a confident silhouette and a clear focal point. Use deliberate camera placement, controlled metal or dielectric material contrast, shaped highlights and edge lighting to communicate depth and craftsmanship. Choose a light or dark environment according to the requested mood and subject, keeping the scientific mechanism and specified structure intact. Reserve intentional space for the requested title or branding, but do not invent logos, publication marks or endorsement text. Keep supporting elements subordinate to the subject. Avoid random circuits, excessive bloom and decorative features that contradict the described device.",
+      "checks": [
+        "缩略图下能识别主体，标题区不会与关键结构冲突。",
+        "高光与氛围不盖住器件，不添加不存在的部件或机制。",
+        "没有擅自生成期刊 Logo、认证、品牌背书或无依据结论。"
+      ]
+    }
+  ]
+}

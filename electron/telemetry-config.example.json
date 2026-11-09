@@ -1,0 +1,5 @@
+{
+  "host": "https://us.i.posthog.com",
+  "token": "phc_YOUR_PUBLIC_PROJECT_TOKEN",
+  "projectId": "YOUR_PROJECT_ID"
+}

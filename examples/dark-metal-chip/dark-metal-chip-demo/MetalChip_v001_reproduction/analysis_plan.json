@@ -1,0 +1,1795 @@
+{
+  "schemaVersion": 1,
+  "subject": "MetalChip",
+  "coordinateSystem": "Z_UP_RIGHT_HANDED",
+  "assumptions": [
+    "Illustrative relative dimensions, not calibrated device measurements.",
+    "Four corner bore axes remain open through all underlying chip layers.",
+    "Fine conductor artwork uses supplied trace_paths.json; hidden circuitry not inferred.",
+    "44 pads distributed North 11, South 13, West 9, East 11 to match reference visible spacing."
+  ],
+  "objects": [
+    {
+      "id": "carrier",
+      "name": "Black carrier",
+      "group": "Package",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.004
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.008
+      ],
+      "material": "black"
+    },
+    {
+      "id": "central_plate",
+      "name": "Champagne gold plate",
+      "group": "Die",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00842
+      ],
+      "size": [
+        0.0517,
+        0.0517,
+        0.001
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_1_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0146,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_2_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.01095,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_3_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.0073,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_4_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        -0.00365,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_5_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_6_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.00365,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_7_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0073,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_8_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.01095,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_1",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_2",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_3",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_4",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        -0.002675,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_5",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        -0.008025,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "pillar_9_6",
+      "group": "Array",
+      "shape": "box",
+      "position": [
+        0.0146,
+        -0.013375,
+        0.010395
+      ],
+      "size": [
+        0.0021,
+        0.0024,
+        0.00295
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_1",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_2",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_3",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_4",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_5",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_6",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_7",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_8",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_9",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_10",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_North_11",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_1",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_2",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_3",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_4",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_5",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_6",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_7",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_8",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_9",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_10",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_11",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_12",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_South_13",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_1",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_2",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_3",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_4",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_5",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_6",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_7",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_8",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_West_9",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_1",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_2",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_3",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_4",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_5",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_6",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_7",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_8",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_9",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_10",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "contact_East_11",
+      "group": "Contacts",
+      "shape": "custom",
+      "position": [
+        0,
+        0,
+        0.00757
+      ],
+      "size": [
+        0.00505,
+        0.005,
+        0.00083
+      ],
+      "material": "gold"
+    },
+    {
+      "id": "mount_-1_-1",
+      "group": "Mounts",
+      "shape": "custom",
+      "position": [
+        -0.04325,
+        0.04325,
+        0.004825
+      ],
+      "size": [
+        0.0176,
+        0.0176,
+        0.00635
+      ],
+      "material": "silver",
+      "boreRadius": 0.00166
+    },
+    {
+      "id": "mount_-1_1",
+      "group": "Mounts",
+      "shape": "custom",
+      "position": [
+        -0.04325,
+        -0.04325,
+        0.004825
+      ],
+      "size": [
+        0.0176,
+        0.0176,
+        0.00635
+      ],
+      "material": "silver",
+      "boreRadius": 0.00166
+    },
+    {
+      "id": "mount_1_-1",
+      "group": "Mounts",
+      "shape": "custom",
+      "position": [
+        0.04325,
+        0.04325,
+        0.004825
+      ],
+      "size": [
+        0.0176,
+        0.0176,
+        0.00635
+      ],
+      "material": "silver",
+      "boreRadius": 0.00166
+    },
+    {
+      "id": "mount_1_1",
+      "group": "Mounts",
+      "shape": "custom",
+      "position": [
+        0.04325,
+        -0.04325,
+        0.004825
+      ],
+      "size": [
+        0.0176,
+        0.0176,
+        0.00635
+      ],
+      "material": "silver",
+      "boreRadius": 0.00166
+    }
+  ],
+  "materials": [
+    {
+      "id": "black",
+      "color": [
+        0.018,
+        0.019,
+        0.023
+      ],
+      "metallic": 0,
+      "roughness": 0.31
+    },
+    {
+      "id": "gold",
+      "color": [
+        0.92,
+        0.76,
+        0.47
+      ],
+      "metallic": 1,
+      "roughness": 0.21
+    },
+    {
+      "id": "silver",
+      "color": [
+        0.73,
+        0.76,
+        0.8
+      ],
+      "metallic": 1,
+      "roughness": 0.23
+    }
+  ],
+  "camera": {
+    "position": [
+      0.1453,
+      -0.18275,
+      0.16906
+    ],
+    "target": [
+      0,
+      0,
+      0.0045
+    ],
+    "projection": "perspective"
+  },
+  "lights": [
+    {
+      "id": "key",
+      "position": [
+        -0.07,
+        0.085,
+        0.125
+      ],
+      "color": [
+        1,
+        0.985,
+        0.96
+      ],
+      "power": 1.1,
+      "size": 0.15
+    },
+    {
+      "id": "side",
+      "position": [
+        -0.105,
+        -0.11,
+        0.09
+      ],
+      "color": [
+        0.97,
+        0.985,
+        1
+      ],
+      "power": 0.65,
+      "size": 0.13
+    },
+    {
+      "id": "fill",
+      "position": [
+        0.125,
+        0.065,
+        0.09
+      ],
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "power": 0.6,
+      "size": 0.125
+    }
+  ],
+  "render": {
+    "width": 1536,
+    "height": 1024,
+    "samples": 32,
+    "seed": 0
+  },
+  "reference": {
+    "file": "D:\\自媒体\\可视化\\可视化实验室工作台项目实验\\开源演示_第三期暗场芯片\\MetalChip_reference.png",
+    "sha256": "de0064f8df44e91ebd3e86c55977d6bdb9f34f6798ce9fb3e98220026167b559"
+  },
+  "referenceIds": [
+    "8f1da32a-64a4-46d3-ab3c-8223e8d57279"
+  ],
+  "review": {
+    "status": "pending",
+    "remainingDifferences": [
+      "Color and lighting await user review.",
+      "Single-view hidden geometry is illustrative."
+    ]
+  }
+}

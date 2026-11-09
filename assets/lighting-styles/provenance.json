@@ -1,0 +1,18 @@
+{
+  "previews": [
+    {
+      "id": "white-studio",
+      "source": "lighting-lab/chip-white/v001/review04/blender/chip_white.png",
+      "software": "Blender",
+      "sha256": "5387f3e70130aec78c88444d29f9aa6fce14c462d7a3989c39859c1cdde54e28",
+      "processing": "byte-identical copy; displayed as CSS thumbnail"
+    },
+    {
+      "id": "dark-studio",
+      "source": "projects/第2期/第2期_金块布光.png",
+      "software": "Existing native chip render",
+      "sha256": "bcc5f6214382cd3bb21a367e89465b66f050556bd9d2be9652e1c50364749ca0",
+      "processing": "byte-identical copy; displayed as CSS thumbnail"
+    }
+  ]
+}

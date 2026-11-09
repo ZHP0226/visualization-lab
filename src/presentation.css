@@ -1,0 +1,57 @@
+.viewport-panel{container-type:inline-size}
+.presentation-switch{display:flex;gap:3px;padding:4px;border-radius:11px;pointer-events:auto;flex-shrink:0}
+.presentation-switch button{padding:6px 10px;border-radius:7px;font-size:calc(11px * var(--ui-font-scale, 1));color:#71819c;white-space:nowrap}
+.presentation-switch button[aria-pressed="true"]{background:#fff9;color:#4c66ae;box-shadow:0 1px 5px #5874a514}
+.render-pane{position:absolute;inset:78px 20px 30px;margin:0;display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0}
+.render-pane figcaption{color:#70829f;font-size:calc(12px * var(--ui-font-scale, 1));display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.render-pane figcaption span{font-size:calc(10px * var(--ui-font-scale, 1));color:#91a0b8}
+.render-image-wrap{min-height:0;flex:1;display:grid;place-items:center;border-radius:13px;overflow:hidden;background:#09152c;box-shadow:inset 0 0 0 1px #ffffff17}
+.render-image-wrap img{display:block;width:100%;height:100%;min-height:0;object-fit:contain}
+.structure-view-label{display:none;position:absolute;left:23px;top:84px;color:#99a9c2;font-size:calc(11px * var(--ui-font-scale, 1));pointer-events:none}
+.viewport-panel[data-presentation="render"] .viewport{visibility:hidden;pointer-events:none}
+.viewport-panel[data-presentation="render"] .viewport-toolbar,.viewport-panel[data-presentation="render"] .viewport-bottom{display:none}
+.viewport-panel[data-presentation="compare"] .viewport{width:50%}
+.viewport-panel[data-presentation="compare"] .render-pane{left:calc(50% + 10px);bottom:30px;top:82px}
+.viewport-panel[data-presentation="compare"] .structure-view-label{display:block}
+.viewport-panel[data-presentation="compare"] .viewport-toolbar{left:25%}
+.viewport-panel[data-presentation="compare"] .view-button,.viewport-panel[data-presentation="compare"] .toolbar-divider,.viewport-panel[data-presentation="compare"] .viewport-bottom{display:none}
+.viewport-panel.dark-preview{background:#0b172b}
+.dark-preview .model-breadcrumb>span:first-of-type,.dark-preview .model-breadcrumb>svg{color:#c0cee3}
+.dark-preview .format-tag{color:#95a9cc;background:#ffffff0c;border-color:#ffffff20}
+.dark-preview .render-pane figcaption{color:#bdcce1}
+.dark-preview .render-pane figcaption span{color:#91a3bf}
+.dark-preview .presentation-switch,.dark-preview .viewport-toolbar{background:linear-gradient(135deg,#fffffff0,#dce8f5d9)}
+.model-breadcrumb{flex:1}
+@container (max-width:620px){
+  .presentation-switch button{font-size:calc(10px * var(--ui-font-scale, 1));padding:6px 7px}
+  .viewport-top{gap:8px}
+  .viewport-panel[data-presentation="compare"] .viewport{position:absolute;top:35px;width:100%;height:50%}
+  .viewport-panel[data-presentation="compare"] .render-pane{left:16px;right:16px;top:calc(50% + 38px);bottom:16px;gap:8px}
+  .viewport-panel[data-presentation="compare"] .viewport-toolbar{left:50%;bottom:calc(50% - 27px)}
+  .viewport-panel[data-presentation="compare"] .structure-view-label{top:72px;left:17px}
+  .render-pane figcaption{font-size:calc(11px * var(--ui-font-scale, 1))}
+}
+/* A project can be selected without opening one of its models. */
+.welcome-screen{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:36px;text-align:center;background:radial-gradient(ellipse at 50% 38%,#ffffff9c,transparent 72%)}
+.welcome-screen img{width:150px;height:92px;object-fit:contain;filter:drop-shadow(0 12px 22px #4e83bf14)}
+.welcome-screen h2{margin:6px 0 0;font-size:calc(clamp(20px,2.1vw,32px) * var(--ui-font-scale,1));font-weight:500;line-height:1.55;letter-spacing:.02em;max-width:100%;overflow-wrap:anywhere;color:#263950}
+.welcome-screen p{margin:0;font-size:calc(12px * var(--ui-font-scale, 1));line-height:1.8;color:#8592a8}
+.viewport-panel:not([data-screen=model]) .viewport-top,.viewport-panel:not([data-screen=model]) .viewport-toolbar,.viewport-panel:not([data-screen=model]) .viewport-bottom,.viewport-panel:not([data-screen=model]) .structure-view-label,.viewport-panel:not([data-screen=model]) .axis-gizmo,.viewport-panel:not([data-screen=model]) .viewport{visibility:hidden;pointer-events:none}
+.home-button{margin-bottom:10px}.home-button[aria-current=page]{color:#4969c5;background:#e6edffb3}
+@media(max-height:780px){.welcome-screen{gap:12px;padding:22px}.welcome-screen img{width:118px;height:74px}.welcome-screen h2{font-size:calc(22px * var(--ui-font-scale, 1))}}
+
+/* Three related views share the comparison stage. */
+.render-image-wrap{position:relative}.render-image-wrap img,.image-empty{grid-area:1/1}.image-empty{color:#97a6bd;font-size:calc(12px * var(--ui-font-scale, 1));pointer-events:none}.render-pane figcaption .text-button{font-size:calc(10px * var(--ui-font-scale, 1));padding:2px 4px}#reference-select{min-width:0;max-width:160px;font:inherit;font-size:calc(10px * var(--ui-font-scale, 1));border:1px solid #a6b8de44;border-radius:6px;background:#ffffffd9;color:#536784;padding:3px}#reference-caption-title{font-size:calc(12px * var(--ui-font-scale, 1));color:inherit}.structure-empty{position:absolute;left:0;top:48%;width:33.333%;text-align:center;color:#94a4be;font-size:calc(12px * var(--ui-font-scale, 1));pointer-events:none}
+.viewport-panel[data-presentation="reference"] .viewport{visibility:hidden;pointer-events:none}.viewport-panel[data-presentation="reference"] .viewport-toolbar,.viewport-panel[data-presentation="reference"] .viewport-bottom{display:none}
+.viewport-panel[data-presentation="compare"] .viewport{left:0;right:auto;top:0;width:33.333%;height:100%}
+.viewport-panel[data-presentation="compare"] #render-pane{left:calc(33.333% + 6px);right:calc(33.333% + 6px);top:82px;bottom:24px;gap:8px}
+.viewport-panel[data-presentation="compare"] #reference-pane{left:calc(66.666% + 6px);right:16px;top:82px;bottom:24px;gap:8px}
+.viewport-panel[data-presentation="compare"] .viewport-toolbar{display:none}
+@container(max-width:900px){
+  .viewport-panel[data-presentation="compare"] .viewport{left:0;right:auto;top:34px;width:100%;height:calc(50% - 28px)}
+  .viewport-panel[data-presentation="compare"] #render-pane{left:14px;right:calc(50% + 5px);top:calc(50% + 12px);bottom:14px}
+  .viewport-panel[data-presentation="compare"] #reference-pane{left:calc(50% + 5px);right:14px;top:calc(50% + 12px);bottom:14px}
+  .viewport-panel[data-presentation="compare"] .structure-empty{left:0;top:28%;width:100%}
+  .render-pane figcaption{gap:4px}.render-pane figcaption span{font-size:calc(9px * var(--ui-font-scale, 1))}#reference-select{max-width:135px}
+}
+.viewport-panel:not([data-screen=model]) .structure-empty{display:none}

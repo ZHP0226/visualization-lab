@@ -1,0 +1,65 @@
+{
+  "geometryBinaryIdenticalToV001": true,
+  "nodeNamesIdsTransformsIdentical": true,
+  "pillarsHaveSeparateUpdatedMaterial": true,
+  "platePBR": {
+    "doubleSided": true,
+    "name": "material_12",
+    "pbrMetallicRoughness": {
+      "roughnessFactor": 0.2,
+      "metallicFactor": 1,
+      "baseColorFactor": [
+        0.6382832153523972,
+        0.31854677812509186,
+        0.10048150993772331,
+        1
+      ]
+    }
+  },
+  "pillarPBR": {
+    "doubleSided": true,
+    "name": "material_03",
+    "pbrMetallicRoughness": {
+      "roughnessFactor": 0.14,
+      "metallicFactor": 1,
+      "baseColorFactor": [
+        0.748414103499371,
+        0.21404114048223255,
+        0.003935939504088967,
+        1
+      ]
+    }
+  },
+  "nativeAudit": {
+    "files": {
+      "c4d": "abd538822f2df9c2e92f2c1f216ca983c0f1093f07aa5e3d3c08d118f5856b7d",
+      "png": "0bfd3449f53c36e48740be2b19d00c339af44f8eaf49e99a0bd2505723e762b3"
+    },
+    "nativeReopened": true,
+    "geometryUnchanged": true,
+    "renderSeconds": 322.69400000572205,
+    "settingsSha256": "a71c134206edf8483d021ca0cd8d134351c1986a00af249bdc9af93c4bcd4074",
+    "review": "pending",
+    "version": 21207,
+    "sourceNativeSha256": "654bcff39daa85b996c95ddaf040356cf34a0f3faa54d750648438faf5f2dd28",
+    "chipGeometrySignature": "c1bdd3d13095ca462ceb8d894fa0ac9e234812f2b88ce422dfed8a24c5dbad11",
+    "software": "Cinema 4D R21",
+    "resolution": [
+      1536,
+      1024
+    ],
+    "renderResult": 0
+  },
+  "referenceId": "8f1da32a-64a4-46d3-ab3c-8223e8d57279",
+  "files": {
+    "c4d": "abd538822f2df9c2e92f2c1f216ca983c0f1093f07aa5e3d3c08d118f5856b7d",
+    "glb": "a02012d3f61b78ddd36506b9be55c1bc7a15cad148bf6e34517314d9c919523f",
+    "png": "0bfd3449f53c36e48740be2b19d00c339af44f8eaf49e99a0bd2505723e762b3"
+  },
+  "review": {
+    "status": "reviewed",
+    "differences": [
+      "Visual color/light alignment evaluated against reference; final acceptance pending user review."
+    ]
+  }
+}

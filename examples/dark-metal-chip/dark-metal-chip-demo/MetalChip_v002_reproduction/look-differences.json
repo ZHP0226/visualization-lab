@@ -1,0 +1,272 @@
+{
+  "materials": {
+    "starting": {
+      "01 Brushed Silver Frame": {
+        "tint": [
+          1,
+          1,
+          1
+        ],
+        "roughness": 0.17,
+        "bump": 0.0003,
+        "samples": 4,
+        "specular": 0
+      },
+      "02 Champagne Gold Die": {
+        "displayColor": [
+          0.82,
+          0.6,
+          0.35
+        ],
+        "tint": [
+          0.95,
+          0.995,
+          0.91
+        ],
+        "roughness": 0.2,
+        "bump": 0.00025,
+        "samples": 4,
+        "coloredSpecular": false,
+        "metal": "COPPER",
+        "specular": 0.03,
+        "diffuse": 0.23,
+        "reflection": 0.72
+      },
+      "03 Polished Gold Edges": {
+        "displayColor": [
+          0.86,
+          0.65,
+          0.4
+        ],
+        "tint": [
+          1,
+          0.91,
+          0.83
+        ],
+        "roughness": 0.18,
+        "samples": 4,
+        "coloredSpecular": false,
+        "metal": "GOLD",
+        "specular": 0.03,
+        "diffuse": 0
+      },
+      "04 Fine Gold Conductors": {
+        "displayColor": [
+          0.9,
+          0.72,
+          0.47
+        ],
+        "tint": [
+          0.99,
+          1,
+          0.9
+        ],
+        "roughness": 0.18,
+        "samples": 4,
+        "coloredSpecular": false,
+        "specular": 0.04,
+        "metal": "COPPER"
+      },
+      "05 Black Ceramic Base": {
+        "bump": 0.0006
+      },
+      "06 Recessed Graphite Substrate": {
+        "bump": 0.0009
+      },
+      "07 Dark Satin Studio Floor": {
+        "displayColor": [
+          0.14,
+          0.14,
+          0.14
+        ],
+        "bump": 0.0003,
+        "roughness": 0.65,
+        "reflection": 0.08,
+        "samples": 4,
+        "luminance": [
+          0.005,
+          0.0055,
+          0.006
+        ]
+      }
+    },
+    "final": {
+      "01 Brushed Silver Frame": {
+        "tint": [
+          1,
+          1,
+          1
+        ],
+        "roughness": 0.23,
+        "bump": 0.0003,
+        "samples": 4,
+        "specular": 0,
+        "diffuse": 0.45,
+        "reflection": 0.6,
+        "displayColor": [
+          0.73,
+          0.74,
+          0.76
+        ]
+      },
+      "02 Champagne Gold Die": {
+        "displayColor": [
+          0.82,
+          0.6,
+          0.35
+        ],
+        "tint": [
+          0.95,
+          0.995,
+          0.91
+        ],
+        "roughness": 0.2,
+        "bump": 0.00025,
+        "samples": 4,
+        "coloredSpecular": false,
+        "metal": "COPPER",
+        "specular": 0.03,
+        "diffuse": 0.28,
+        "reflection": 0.72
+      },
+      "03 Polished Gold Edges": {
+        "displayColor": [
+          0.86,
+          0.65,
+          0.4
+        ],
+        "tint": [
+          1,
+          0.91,
+          0.83
+        ],
+        "roughness": 0.18,
+        "samples": 4,
+        "coloredSpecular": false,
+        "metal": "GOLD",
+        "specular": 0.03,
+        "diffuse": 0
+      },
+      "04 Fine Gold Conductors": {
+        "displayColor": [
+          0.9,
+          0.72,
+          0.47
+        ],
+        "tint": [
+          0.99,
+          1,
+          0.9
+        ],
+        "roughness": 0.18,
+        "samples": 4,
+        "coloredSpecular": false,
+        "specular": 0.04,
+        "metal": "COPPER"
+      },
+      "05 Black Ceramic Base": {
+        "bump": 0.0006
+      },
+      "06 Recessed Graphite Substrate": {
+        "bump": 0.0009
+      },
+      "07 Dark Satin Studio Floor": {
+        "displayColor": [
+          0.14,
+          0.14,
+          0.14
+        ],
+        "bump": 0.0003,
+        "roughness": 0.65,
+        "reflection": 0.08,
+        "samples": 4,
+        "luminance": [
+          0.11,
+          0.108,
+          0.106
+        ],
+        "diffuse": 0.22
+      }
+    }
+  },
+  "lights": {
+    "starting": {
+      "KEY - large softbox upper left": {
+        "power": 0.95,
+        "position": [
+          -95,
+          70,
+          -120
+        ],
+        "size": [
+          80,
+          65
+        ]
+      },
+      "SIDE - broad silver reflection": {
+        "power": 0.3
+      },
+      "FILL - right wall reflection": {
+        "power": 0.16
+      }
+    },
+    "final": {
+      "KEY - large softbox upper left": {
+        "power": 0.95,
+        "position": [
+          -95,
+          70,
+          -120
+        ],
+        "size": [
+          80,
+          65
+        ]
+      },
+      "SIDE - broad silver reflection": {
+        "power": 0.35
+      },
+      "FILL - right wall reflection": {
+        "power": 0.32
+      }
+    }
+  },
+  "cards": {
+    "starting": {
+      "Key diffusion panel": {
+        "brightness": 1.2
+      },
+      "Left reflection panel": {
+        "brightness": 1.15
+      },
+      "Right reflection panel": {
+        "brightness": 0.45
+      }
+    },
+    "final": {
+      "Key diffusion panel": {
+        "brightness": 1.15,
+        "position": [
+          -145,
+          169,
+          -183
+        ],
+        "size": [
+          280,
+          230,
+          0.1
+        ]
+      },
+      "Left reflection panel": {
+        "brightness": 1.15
+      },
+      "Right reflection panel": {
+        "brightness": 0.72
+      }
+    }
+  },
+  "environment": {
+    "starting": 0.4,
+    "final": 0.45
+  }
+}
