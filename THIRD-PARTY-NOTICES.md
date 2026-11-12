@@ -24,3 +24,5 @@ Apache 通用正文在 `licenses/Apache-2.0.txt`。便携包保留 Electron 的�
 重新分发时请保留项目 MIT、第三方声明、字体与所用运行库原许可，不要把第三方组件标为本项目独占创作。
 
 - `examples/dark-metal-chip` 使用本项目第三期的自写芯片程序与自制纹理，先生成参考，再在 Cinema 4D 中新建、重开并渲染。自有代码与资产按 MIT；C4D 本体不在分发范围内。
+
+- `assets/plotting` 为自写模板和辅助代码；`examples/nature-four-panel` 为确定性合成数据和本项目绘制的图，按 MIT 提供。Python 及 NumPy、SciPy、Matplotlib、scikit-learn 由用户另外安装，遵循其各自许可。Arial 字体文件未随软件分发，缺少该字体时应自行安装合法字体或调整预设。

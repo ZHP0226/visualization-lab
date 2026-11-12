@@ -1,0 +1,346 @@
+{
+  "version": 1,
+  "templateId": "COMPOSITE",
+  "fields": [
+    {
+      "path": [
+        "a__x"
+      ],
+      "shape": [
+        241
+      ],
+      "axis": 0,
+      "flat": false,
+      "dtype": "f",
+      "columns": [
+        "c0001"
+      ]
+    },
+    {
+      "path": [
+        "a__y"
+      ],
+      "shape": [
+        3,
+        241
+      ],
+      "axis": 1,
+      "flat": false,
+      "dtype": "f",
+      "columns": [
+        "c0002",
+        "c0003",
+        "c0004"
+      ]
+    },
+    {
+      "path": [
+        "b__X"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0005"
+      ]
+    },
+    {
+      "path": [
+        "b__Y"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0006"
+      ]
+    },
+    {
+      "path": [
+        "b__Z"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0007"
+      ]
+    },
+    {
+      "path": [
+        "c__X"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0008"
+      ]
+    },
+    {
+      "path": [
+        "c__Y"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0009"
+      ]
+    },
+    {
+      "path": [
+        "c__Z"
+      ],
+      "shape": [
+        65,
+        65
+      ],
+      "axis": 0,
+      "flat": true,
+      "dtype": "f",
+      "columns": [
+        "c0010"
+      ]
+    },
+    {
+      "path": [
+        "d__x"
+      ],
+      "shape": [
+        64
+      ],
+      "axis": 0,
+      "flat": false,
+      "dtype": "f",
+      "columns": [
+        "c0011"
+      ]
+    },
+    {
+      "path": [
+        "d__y"
+      ],
+      "shape": [
+        64
+      ],
+      "axis": 0,
+      "flat": false,
+      "dtype": "f",
+      "columns": [
+        "c0012"
+      ]
+    },
+    {
+      "path": [
+        "d__z"
+      ],
+      "shape": [
+        64
+      ],
+      "axis": 0,
+      "flat": false,
+      "dtype": "f",
+      "columns": [
+        "c0013"
+      ]
+    }
+  ],
+  "columnSpecs": {
+    "c0001": {
+      "id": "c0001",
+      "label": "a__x",
+      "field": 0,
+      "path": [
+        "a__x"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0002": {
+      "id": "c0002",
+      "label": "a__y · 1",
+      "field": 1,
+      "path": [
+        "a__y"
+      ],
+      "index": [
+        0
+      ],
+      "numeric": true
+    },
+    "c0003": {
+      "id": "c0003",
+      "label": "a__y · 2",
+      "field": 1,
+      "path": [
+        "a__y"
+      ],
+      "index": [
+        1
+      ],
+      "numeric": true
+    },
+    "c0004": {
+      "id": "c0004",
+      "label": "a__y · 3",
+      "field": 1,
+      "path": [
+        "a__y"
+      ],
+      "index": [
+        2
+      ],
+      "numeric": true
+    },
+    "c0005": {
+      "id": "c0005",
+      "label": "b__X",
+      "field": 2,
+      "path": [
+        "b__X"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0006": {
+      "id": "c0006",
+      "label": "b__Y",
+      "field": 3,
+      "path": [
+        "b__Y"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0007": {
+      "id": "c0007",
+      "label": "b__Z",
+      "field": 4,
+      "path": [
+        "b__Z"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0008": {
+      "id": "c0008",
+      "label": "c__X",
+      "field": 5,
+      "path": [
+        "c__X"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0009": {
+      "id": "c0009",
+      "label": "c__Y",
+      "field": 6,
+      "path": [
+        "c__Y"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0010": {
+      "id": "c0010",
+      "label": "c__Z",
+      "field": 7,
+      "path": [
+        "c__Z"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0011": {
+      "id": "c0011",
+      "label": "d__x",
+      "field": 8,
+      "path": [
+        "d__x"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0012": {
+      "id": "c0012",
+      "label": "d__y",
+      "field": 9,
+      "path": [
+        "d__y"
+      ],
+      "index": [],
+      "numeric": true
+    },
+    "c0013": {
+      "id": "c0013",
+      "label": "d__z",
+      "field": 10,
+      "path": [
+        "d__z"
+      ],
+      "index": [],
+      "numeric": true
+    }
+  },
+  "panels": [
+    {
+      "id": "panel-1",
+      "name": "a 图",
+      "columns": [
+        "c0001",
+        "c0002",
+        "c0003",
+        "c0004"
+      ]
+    },
+    {
+      "id": "panel-2",
+      "name": "b 图",
+      "columns": [
+        "c0005",
+        "c0006",
+        "c0007"
+      ]
+    },
+    {
+      "id": "panel-3",
+      "name": "c 图",
+      "columns": [
+        "c0008",
+        "c0009",
+        "c0010"
+      ]
+    },
+    {
+      "id": "panel-4",
+      "name": "d 图",
+      "columns": [
+        "c0011",
+        "c0012",
+        "c0013"
+      ]
+    }
+  ]
+}

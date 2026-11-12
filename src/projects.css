@@ -22,3 +22,9 @@
 .unavailable-project .row-kind{color:#ad6d54}.unavailable-project .row-label{opacity:.7;cursor:default}
 
 .project-asset.related:not(.selected){background:#7089d70b;box-shadow:inset 2px 0 #7d96d886}.reference-associations{border:1px solid #a6b8de44;border-radius:8px;margin:12px 0;padding:10px}.reference-associations legend{font-size:calc(12px * var(--ui-font-scale, 1));color:#61728b}#pair-references{max-height:180px;overflow:auto}#pair-references label{display:flex;gap:8px;align-items:center;font-size:calc(12px * var(--ui-font-scale, 1));overflow-wrap:anywhere}#pair-references input{width:auto;flex-shrink:0}
+
+/* Project types share the existing tree without changing asset nesting. */
+.project-section + .project-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.project-section-heading{display:flex;align-items:center;justify-content:space-between;margin:4px 9px 8px;font-size:calc(12px * var(--ui-font-scale, 1));font-weight:600;color:inherit}
+.project-section-count{font-size:calc(10px * var(--ui-font-scale, 1));font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+.project-section > .tree-list > .tree-message{margin:8px 9px 12px}

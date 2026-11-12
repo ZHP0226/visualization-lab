@@ -17,6 +17,8 @@ const { ChatStore } = require('./chat-store.cjs');
 const { SidebarActions } = require('./sidebar-actions.cjs');
 const { UsageStatistics } = require('./usage-statistics.cjs');
 const usageConfig = require('./telemetry-config.json');
+let usageStatistics;
+const { PlotStore } = require('./plotting.cjs');
 const library = new FileLibrary();
 const projects = new ProjectStore(library);
 const base = path.join(__dirname, '..');
@@ -28,7 +30,6 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'workbench', privileges: { stand
 let win;
 let codex;
 let chats;
-let usageStatistics;
 const settingsPath = () => path.join(app.getPath('userData'), 'workbench-settings.json');
 async function settings() { try { return JSON.parse(await fs.readFile(settingsPath(), 'utf8')); } catch { return {}; } }
 let settingsQueue = Promise.resolve();
@@ -49,6 +50,7 @@ async function updateProjectLocation(from,to,id,detached=false){
 }
 async function saveRoot(root) { if (!testing) await saveSettings({ folder: root.path, activeProjectId: null }); }
 async function saveProjects(activeProjectId,restoreRemoved=false) { const saved = await settings(); await saveSettings({ projects: [...new Set([...(saved.projects || []), ...projects.projects.values()])], activeProjectId,...restoreRemoved?{removedProjects:(Array.isArray(saved.removedProjects)?saved.removedProjects:[]).filter(row=>row&&row.id!==activeProjectId)}:{} }); }
+const plots = new PlotStore(projects,path.join(base,'assets','plotting'),{runtime:async()=>(await settings()).plotPython,saveRuntime:plotPython=>saveSettings({plotPython})});
 async function projectCatalog() {
   const saved = await settings();
   const managedRoot = testing ? path.join(app.getPath('userData'), 'projects') : app.isPackaged ? path.resolve(path.dirname(app.getPath('exe')), '..', '..', 'projects') : path.join(base, 'projects');
@@ -78,9 +80,10 @@ app.whenReady().then(async () => {
   const chatRequests = new Map();
   const editNotes = new EditNotes(path.join(app.getPath('userData'), 'edit-notes.json')), noteSubmissions = new Map();
   const deliveries = new DeliveryManager({ projects, library, backupDirectory: path.join(app.getPath('userData'), 'model-backups'), validateImage: data => !nativeImage.createFromBuffer(data).isEmpty(), imageSize: data => nativeImage.createFromBuffer(data).getSize() });
-  codex = new AgentManager({ cwd: path.join(app.getPath('userData'), 'chat-workspace'), configuredAgents:()=>aiConnections.specs(),decryptConnection:row=>aiConnections.decrypt(row),apiHistory:id=>chats.apiHistory(id),sessionPersistence: { get: id => chats.getSession(id), set: (id,session) => chats.setSession(id,session) }, prepareContext: (context, text, conversationId) => deliveries.prepare(context ? { ...context, agentId: codex.selectedId, conversationId: conversationId || null } : null, text), completeContext: delivery => deliveries.finish(delivery), toolHandler: async (tool, args, context, cancelled, delivery) => {
+  codex = new AgentManager({ cwd: path.join(app.getPath('userData'), 'chat-workspace'), configuredAgents:()=>aiConnections.specs(),decryptConnection:row=>aiConnections.decrypt(row),apiHistory:id=>chats.apiHistory(id),sessionPersistence: { get: id => chats.getSession(id), set: (id,session) => chats.setSession(id,session) }, prepareContext: async (context, text, conversationId) => context?.projectKind==='plot' ? plots.prepare(context,text) : deliveries.prepare(context ? { ...context, agentId: codex.selectedId, conversationId: conversationId || null } : null, text), completeContext: delivery => delivery?.kind==='plot' ? plots.finish(delivery) : deliveries.finish(delivery), toolHandler: async (tool, args, context, cancelled, delivery) => {
     if (!context) throw new Error('请先在左侧打开项目中的模型');
     if (tool === 'get_workbench_context') return delivery.public;
+    if(delivery?.kind==='plot'){if(tool==='publish_workbench_result'){const update=await plots.finish(delivery);return {output:{saved:!!update},update};}throw new Error('数据绘图请在上下文的临时目录编辑绘图.py或数据.xlsx，再交付结果。');}
     if (tool === 'publish_workbench_image') {
       if (cancelled()) throw new Error('操作已停止');
       const update = await deliveries.imageDelivery.publish(delivery);
@@ -116,6 +119,7 @@ app.whenReady().then(async () => {
     return { output: { saved: true, fileName: update.model.name, ...result.details, finalRenderUpdated: false }, details: result.details, update };
   } });
   const forward = event => {
+    if(event.figure && event.document)event={...event,type:'plot-updated'};
     const chatId = chatRequests.get(event.requestId);
     if (chatId && chats) {
       event = { ...event, conversationId: chatId };
@@ -211,6 +215,9 @@ app.whenReady().then(async () => {
       } else if (segments[0] === 'lighting-preview') {
         if (segments.length !== 2) return new Response('Forbidden', { status: 403 });
         file = lightingStyles.previewFile(segments[1]);
+      } else if (segments[0] === 'plot-template') {
+        if(segments.length!==2)return new Response('Forbidden',{status:403});
+        file=await plots.preview(segments[1]);
       } else if (segments[0] === 'model') {
         file = await library.resolve(segments[1], segments.slice(2).join(path.sep));
         if (!ASSET_EXTENSIONS.has(path.extname(file).toLowerCase())) return new Response('Unsupported resource', { status: 403 });
@@ -260,7 +267,29 @@ app.whenReady().then(async () => {
     const result = await dialog.showOpenDialog(win, { title: '选择项目保存位置', properties: ['openDirectory', 'createDirectory'] });
     return result.canceled ? null : result.filePaths[0];
   });
-  handle('project:create', async (name, parent) => { const project = await projects.create(name, parent); await saveProjects(project.id); return project; });
+  handle('project:create', async (name, parent, kind) => { const project = await projects.create(name, parent, kind); await saveProjects(project.id); return project; });
+  handle('plot:catalog',()=>plots.catalog());
+  handle('plot:create',(projectId,templateId,options)=>plots.create(projectId,templateId,options));
+  handle('plot:load',(projectId,id)=>plots.load(projectId,id));
+  handle('plot:run',(projectId,id,options)=>plots.run(projectId,id,options));
+  handle('plot:inspect',async(projectId,id)=>{
+    const selected=await dialog.showOpenDialog(win,{title:'上传绘图数据',filters:[{name:'数据表',extensions:['xlsx','csv','tsv']}],properties:['openFile']});
+    if(selected.canceled)return null;
+    return plots.inspect(projectId,id,selected.filePaths[0],path.join(app.getPath('userData'),'plot-jobs'));
+  });
+  handle('plot:import',(projectId,id,token,mappings)=>plots.import(projectId,id,token,mappings));
+  handle('plot:inspect-drop',(projectId,id,file)=>plots.inspect(projectId,id,file,path.join(app.getPath('userData'),'plot-jobs')));
+  handle('plot:export',async(projectId,id,format='pdf')=>{
+    if(!['pdf','xlsx'].includes(format))throw new Error('请选择PDF或Excel');
+    const f=await plots.figure(projectId,id), source=await plots.file(projectId,id,format==='pdf'?'图.pdf':'数据.xlsx');
+    const selected=await dialog.showSaveDialog(win,{title:format==='pdf'?'导出PDF':'导出Excel数据模板',defaultPath:f.figure.name.replace(/[^\p{L}\p{N} ._()（）-]/gu,'_').slice(0,120)+'.'+format,filters:[{name:format==='pdf'?'PDF图':'Excel工作簿',extensions:[format]}]});
+    if(selected.canceled)return null;await fs.copyFile(source,selected.filePath);return selected.filePath;
+  });
+  handle('plot:reveal',async(projectId,id)=>{shell.showItemInFolder(await plots.file(projectId,id,'图.pdf'));return true;});
+  handle('plot:runtime',async()=>{
+    const selected=await dialog.showOpenDialog(win,{title:'选择绘图Python（需NumPy、SciPy、Matplotlib）',filters:[{name:'Python程序',extensions:['exe']}],properties:['openFile']});
+    if(selected.canceled)return null;return plots.configure(selected.filePaths[0],path.join(app.getPath('userData'),'plot-jobs'));
+  });
   handle('project:open', async () => {
     const result = await dialog.showOpenDialog(win, { title: '打开已有工作台项目', properties: ['openDirectory'] });
     if (result.canceled) return null;

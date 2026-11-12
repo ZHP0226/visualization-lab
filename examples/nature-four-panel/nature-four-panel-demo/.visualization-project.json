@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "1c104fd8-b28d-4fe4-89c7-f3f94acb1071",
+  "name": "Nature 单栏四分图示例",
+  "kind": "plot",
+  "models": [],
+  "renders": [],
+  "links": {},
+  "figures": [
+    {
+      "id": "1a0127ff-0a6d-405a-bee1-31abd428432f",
+      "name": "Nature 单栏四分图 · 二维与三维",
+      "revision": 1,
+      "purpose": "合成数据；模板1、41、43、45；89×88 mm"
+    }
+  ]
+}

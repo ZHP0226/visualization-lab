@@ -1,6 +1,6 @@
 {
   "name": "visualization-workbench",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "面向各种可视化表达的本地创作工作台",
   "main": "electron/main.cjs",

@@ -64,7 +64,7 @@ async function showConversation(id = null, create = false) {
     if (previous && submitting?.chatId !== previous.id) await api.saveChatDraft(previous.id,draft);
     const view = create ? await api.createChat(project,agent) : await api.openChat(project,agent,id);
     if (ticket !== chatTicket) return;
-    conversation = view.chat; conversationScope = next; input.value = conversation.draft;
+    conversation = view.chat; conversationScope = next; input.value = conversation.draft; document.dispatchEvent(new CustomEvent('workbench:draft-restored'));
     chatOptions(view.chats); renderConversation(); creationOptions.refresh(); saveStatus.textContent = '已保存'; saveStatus.classList.remove('error');
   } catch (error) { if (ticket === chatTicket) { savingError(error); threadSelect.value = conversation?.id || ''; } }
   finally { if (ticket === chatTicket) { loadingChat = false; controls(); } }
@@ -186,7 +186,7 @@ $('chat-form').addEventListener('submit', async event => {
   const id = crypto.randomUUID(); active = { id, chatId: sentConversation, reply, hasText: false }; submitting = { chatId: sentConversation }; controls();
   try {
     await api.sendCodex(text, id, { model: modelSelect.value, effort: effortSelect.value, context, editNotes: submission.versions, conversationId: sentConversation, sentDraft });
-    if (conversation?.id === sentConversation && input.value === sentDraft) input.value = '';
+    if (conversation?.id === sentConversation && input.value === sentDraft) { input.value = ''; document.dispatchEvent(new CustomEvent('workbench:draft-restored')); }
   } catch (error) {
     if (conversation?.id === sentConversation && (!input.value || input.value === sentDraft)) { input.value = sentDraft; await api.saveChatDraft(sentConversation,sentDraft).catch(savingError); }
     finish({ requestId: id, status: 'failed', error: errorText(error) });
@@ -202,5 +202,6 @@ document.addEventListener('workbench:model', event => {
   label.title = `${label.textContent}\nEnter 发送 · Shift + Enter 换行`; showConversation();
 });
 window.workbenchChatState = () => ({ connection, busy: !!active || !!submitting, agent: agentSelect.value, model: modelSelect.value, effort: effortSelect.value, modelCount: models.length, reasoningOptions: selectedModel()?.supportedReasoningEfforts || [], conversationId: conversation?.id || null, loadingChat, scope: conversationScope });
+document.addEventListener('workbench:plot',event=>{$('chat-model-context').textContent=`当前数据图：${event.detail.name}`;});
 setupAIConnections({onSaved:discover});
 discover();

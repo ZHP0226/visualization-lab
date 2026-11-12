@@ -1,0 +1,331 @@
+{
+  "version": 1,
+  "default": "nature",
+  "description": "工作台固定绘图风格；为本软件选择的确定参数，不作为逐刊投稿合规认证。",
+  "styles": [
+    {
+      "id": "nature",
+      "name": "Nature 主刊",
+      "widthMm": {
+        "single": 89,
+        "double": 183
+      },
+      "font": "Arial",
+      "fontPt": 7,
+      "tickPt": 6,
+      "legendPt": 6,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "nature-portfolio",
+      "name": "Nature 系列通用",
+      "widthMm": {
+        "single": 88,
+        "double": 180
+      },
+      "font": "Arial",
+      "fontPt": 7,
+      "tickPt": 6,
+      "legendPt": 6,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "science",
+      "name": "Science 主刊",
+      "widthMm": {
+        "single": 57,
+        "double": 184
+      },
+      "font": "Arial",
+      "fontPt": 7,
+      "tickPt": 6,
+      "legendPt": 6,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "science-advances",
+      "name": "Science Advances",
+      "widthMm": {
+        "single": 85,
+        "double": 175
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "cell",
+      "name": "Cell Press 系列",
+      "widthMm": {
+        "single": 85,
+        "double": 174
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "springer",
+      "name": "Springer 通用",
+      "widthMm": {
+        "single": 84,
+        "double": 174
+      },
+      "font": "Arial",
+      "fontPt": 9,
+      "tickPt": 8,
+      "legendPt": 8,
+      "panelPt": 9,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "elsevier",
+      "name": "Elsevier 通用",
+      "widthMm": {
+        "single": 90,
+        "double": 190
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "wiley",
+      "name": "Wiley Advanced 系列",
+      "widthMm": {
+        "single": 85,
+        "double": 178
+      },
+      "font": "Arial",
+      "fontPt": 10,
+      "tickPt": 9,
+      "legendPt": 9,
+      "panelPt": 10,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "acs",
+      "name": "ACS 系列",
+      "widthMm": {
+        "single": 84.6,
+        "double": 177.8
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "aps",
+      "name": "APS Physical Review 系列",
+      "widthMm": {
+        "single": 86,
+        "double": 178
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "aip",
+      "name": "AIP Publishing 系列",
+      "widthMm": {
+        "single": 85,
+        "double": 170
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 8,
+      "legendPt": 8,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "optica",
+      "name": "Optica 双栏期刊",
+      "widthMm": {
+        "single": 85,
+        "double": 178
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "optica-express",
+      "name": "Optica Express 系列",
+      "widthMm": {
+        "single": 90,
+        "double": 180
+      },
+      "font": "Arial",
+      "fontPt": 9,
+      "tickPt": 8,
+      "legendPt": 8,
+      "panelPt": 9,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "ieee",
+      "name": "IEEE 系列",
+      "widthMm": {
+        "single": 88.9,
+        "double": 182
+      },
+      "font": "Arial",
+      "fontPt": 9,
+      "tickPt": 8,
+      "legendPt": 8,
+      "panelPt": 9,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "iop",
+      "name": "IOP Publishing 系列",
+      "widthMm": {
+        "single": 85,
+        "double": 150
+      },
+      "font": "Arial",
+      "fontPt": 9,
+      "tickPt": 8,
+      "legendPt": 8,
+      "panelPt": 9,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "pnas",
+      "name": "PNAS",
+      "widthMm": {
+        "single": 87,
+        "double": 178
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    },
+    {
+      "id": "custom",
+      "name": "自定义",
+      "widthMm": {
+        "single": 85,
+        "double": 180
+      },
+      "font": "Arial",
+      "fontPt": 8,
+      "tickPt": 7,
+      "legendPt": 7,
+      "panelPt": 8,
+      "linePt": 1.0,
+      "axesPt": 0.5,
+      "tickWidthPt": 0.5,
+      "tickLengthPt": 2.5,
+      "markerPt": 3.5,
+      "description": "布局紧凑，尽量减少无效留白；对齐分图；固定字号线宽，文字不重叠；统一配色，图例避开曲线。"
+    }
+  ],
+  "layoutRule": "固定字号和线宽，尽量利用图幅；紧凑对齐分图，减少边缘和中间无效留白，保留标签和图例空间。"
+}

@@ -5,6 +5,7 @@ import { setupWorkspaceLayout } from './workspace-layout.mjs';
 import { startStartup } from './startup.js';
 import {setupFluidMotion,animateTreeDisclosure} from './fluid-motion.js';
 import {setupSidebarMenu} from './sidebar-menu.js';
+import {setupPlotting} from './plotting.js';
 import { setupPointEditing } from './point-edit.js';
 import { setupImageZoom } from './image-zoom.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -32,6 +33,7 @@ let referenceImage = null;
 const imageZoom = {render:setupImageZoom($('final-render'),$('reset-render-zoom')),reference:setupImageZoom($('reference-render'),$('reset-reference-zoom'))};
 let sourceObjects = new Map();
 let projectList = [], activeProject = null;
+const plotting=setupPlotting({api,onProject:project=>{updateProject(project);renderProjects();},onError:error=>report(error)});
 const projectExpanded = new Set(), categoryCollapsed = new Set();
 let projectBusyDepth = 0;
 const fileExpanded = new Set(['', '示例模型']);
@@ -42,12 +44,27 @@ const highlightMaterials = new Map();
 const viewport = $('viewport');
 const canvas = $('scene-canvas');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#ffffff');
-scene.fog = new THREE.Fog('#ffffff', 16, 36);
+const previewBackground = new THREE.Color('#ffffff');
+const previewFog = new THREE.Fog('#ffffff', 16, 36);
+scene.background = previewBackground;
+scene.fog = previewFog;
 let modelBackground=null;
 function applySceneTheme() {
-  scene.background.set(modelBackground || (document.documentElement.dataset.theme==='dark'?'#1b1d20':'#ffffff'));
-  scene.fog.color.copy(scene.background);
+  const dark = document.documentElement.dataset.theme === 'dark';
+  previewBackground.set(modelBackground || (dark ? '#1b1d20' : '#ffffff'));
+  const lightBackground = !dark && previewBackground.getHSL({ h: 0, s: 0, l: 0 }).l > .5;
+  if (lightBackground) {
+    // The composer tone-maps the 3D scene. Keep its white backing outside that pass,
+    // and do not blend a white depth fog into the imported model's materials.
+    scene.background = null;
+    scene.fog = null;
+    viewport.style.backgroundColor = `#${previewBackground.getHexString()}`;
+  } else {
+    scene.background = previewBackground;
+    scene.fog = previewFog;
+    previewFog.color.copy(previewBackground);
+    viewport.style.removeProperty('background-color');
+  }
 }
 const camera = new THREE.PerspectiveCamera(34, 1, .01, 1000);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -453,6 +470,7 @@ async function projectAction(operation) {
   finally { projectBusyDepth--; updateProjectControls(); }
 }
 function clearProjectView() {
+  plotting.setProject(activeProject,{overview:true});
   generation++; selectObject(null); nodeById.clear(); collapsed.clear();
   $('loading').hidden = true;
   if (content) { stage.remove(content); disposeObject(content); content = null; }
@@ -469,13 +487,15 @@ function clearProjectView() {
   $('welcome-title').textContent = activeProject ? `您要在${activeProject.name}项目中构建什么` : '今天您有什么创意';
   $('welcome-description').textContent = activeProject ? '在下方描述创意，或从左侧选择已有模型' : '从下方开始对话，或在左侧选择一个项目';
   $('chat-input').placeholder = activeProject ? `描述您想在${activeProject.name}中构建的内容…` : '说说您今天的创意…';
+  if(activeProject?.kind==='plot')$('chat-input').placeholder='描述绘图需求、数据处理方式或希望调整的图形…';
   $('go-home').setAttribute('aria-current', activeProject ? 'false' : 'page');
   $('structure-tree').replaceChildren();
   const hint = document.createElement('p'); hint.className = 'tree-message'; hint.textContent = '选择或创建模型后，在这里查看结构'; $('structure-tree').append(hint);
 }
 async function chooseProject(project, showWelcome = true) {
   activeProject = await api.activateProject(project.id); updateProject(activeProject); projectExpanded.add(project.id);
-  $('open-file').replaceChildren(icon('plus'), document.createTextNode('导入文件'));
+  plotting.setProject(activeProject);
+  $('open-file').replaceChildren(icon('plus'), document.createTextNode(activeProject?.kind==='plot'?'上传数据':'导入文件'));
   renderProjects();
   if (showWelcome) clearProjectView();
   status(`项目 · ${project.name}`);
@@ -485,7 +505,17 @@ function renderProjects() {
   $('root-name').textContent = activeProject ? activeProject.name : '本机项目';
   $('root-name').title = activeProject?.directory || '';
   $('file-count').textContent = `${projectList.length} 个项目`;
-  for (const project of projectList) {
+  for (const [kind, label] of [['modeling', '建模'], ['plot', '数据绘图']]) {
+    const projects = projectList.filter(project => (project.kind === 'plot' ? 'plot' : 'modeling') === kind);
+    const section = document.createElement('li'); section.className = 'project-section'; section.dataset.projectKind = kind;
+    const heading = document.createElement('h3'); heading.className = 'project-section-heading'; heading.id = `project-section-${kind}`;
+    const title = document.createElement('span'); title.textContent = label;
+    const total = document.createElement('span'); total.className = 'project-section-count'; total.textContent = projects.length;
+    heading.append(title, total);
+    const projectsList = document.createElement('ul'); projectsList.className = 'tree-list'; projectsList.setAttribute('aria-labelledby', heading.id);
+    section.append(heading, projectsList); list.append(section);
+    if (!projects.length) { const hint = document.createElement('li'); hint.className = 'tree-message'; hint.textContent = `暂无${label}项目`; projectsList.append(hint); }
+    for (const project of projects) {
     const li = document.createElement('li'); const row = document.createElement('div');
     row.className = `tree-row project-root ${activeProject?.id === project.id ? 'active-project' : ''}`;
     row.dataset.project = project.id;
@@ -499,10 +529,14 @@ function renderProjects() {
     button.addEventListener('click', async () => { try {
       await projectAction(() => chooseProject(project));
     } catch (error) { report(error); } });
-    const count = document.createElement('span'); count.className = 'row-kind'; count.textContent = project.unavailable ? '暂不可用' : `${Object.keys(project.links).length} 对`;
-    row.append(toggle, button, count); li.append(row); list.append(li);
+    const count = document.createElement('span'); count.className = 'row-kind'; count.textContent = project.unavailable ? '暂不可用' : project.kind==='plot'?`${(project.figures||[]).length} 图`:`${Object.keys(project.links).length} 对`;
+    row.append(toggle, button, count); li.append(row); projectsList.append(li);
     if (project.unavailable || !projectExpanded.has(project.id)) continue;
     const children = document.createElement('ul'); children.className = 'tree-list'; li.append(children);
+    if(project.kind==='plot'){
+      for(const figure of project.figures||[]){const item=document.createElement('li'),line=document.createElement('div');line.className='tree-row';line.style.setProperty('--depth',1);line.dataset.figure=figure.id;const b=document.createElement('button');b.className='row-label';b.setAttribute('aria-pressed',String(activeProject?.id===project.id&&plotting.current()===figure.id));b.append(icon('image','node-icon'),document.createTextNode(figure.name));b.title=figure.purpose||figure.name;b.onclick=async()=>{try{await projectAction(async()=>{await chooseProject(project,false);await plotting.openFigure(figure.id);renderProjects();});}catch(error){report(error);}};line.append(b);item.append(line);children.append(item);}
+      const item=document.createElement('li'),b=document.createElement('button');b.className='text-button';b.style.margin='6px 0 6px 30px';b.textContent='＋ 添加数据图';b.onclick=async()=>{try{await projectAction(()=>chooseProject(project,false));await plotting.openGallery();}catch(error){report(error);}};item.append(b);children.append(item);continue;
+    }
     for (const [kind, label, assets] of [['reference','参考',project.references || []], ['model', '模型', project.models], ['render', '成片', project.renders]]) {
       const categoryKey = `${project.id}/${kind}`; const category = document.createElement('li');
       const groupRow = document.createElement('div'); groupRow.className = 'tree-row project-group'; groupRow.style.setProperty('--depth', 1);groupRow.dataset.group=categoryKey;groupRow.dataset.project=project.id;
@@ -540,12 +574,13 @@ function renderProjects() {
       }
     }
   }
-  if (!projectList.length) { const hint = document.createElement('li'); hint.className = 'tree-message'; hint.textContent = '添加或打开项目，开始整理您的创意'; list.append(hint); }
+  }
   $('file-tree').replaceChildren(list);
   updateProjectControls();
   const paired = activeProject ? Object.keys(activeProject.links).length : 0;
   const pending = activeProject ? activeProject.models.length + activeProject.renders.length - paired * 2 : 0;
   $('project-summary').textContent = activeProject ? `${paired} 组已对应${pending ? ` · ${pending} 项待对应` : ''}` : '选择一个项目开始浏览';
+  if(activeProject?.kind==='plot')$('project-summary').textContent=`${activeProject.figures?.length||0} 张数据图 · Excel / PDF`;
 }
 async function importProject(project, kind = 'all', files = null) {
   return projectAction(async () => {
@@ -612,14 +647,16 @@ $('pair-form').addEventListener('submit', async event => {
   catch (error) { $('pair-dialog-error').textContent = error.message; $('pair-dialog-error').hidden = false; }
   finally { $('confirm-pair').disabled = false; }
 });
-$('add-project').addEventListener('click', () => { $('project-name').value = ''; $('project-parent').value = ''; $('project-dialog-error').hidden = true; $('project-dialog').showModal(); });
+$('add-project').addEventListener('click', () => { $('project-name').value = ''; $('project-parent').value = ''; document.querySelector('input[name="project-kind"][value=modeling]').checked=true;updateProjectKindHint(); $('project-dialog-error').hidden = true; $('project-dialog').showModal(); });
 $('close-project-dialog').addEventListener('click', () => $('project-dialog').close());
+function updateProjectKindHint(){document.querySelector('#project-form .dialog-hint').textContent=document.querySelector('input[name="project-kind"]:checked').value==='plot'?'在所选位置创建数据绘图项目。每张图保存独立代码、PDF和Excel；每个分图对应一个工作表。':'在所选位置新建同名项目目录。“参考”“模型”“成片”为虚拟分组，文件保存在项目目录中。';}
+document.querySelectorAll('input[name="project-kind"]').forEach(input=>input.addEventListener('change',updateProjectKindHint));
 $('choose-project-directory').addEventListener('click', async () => { try { const directory = await api.chooseProjectParent(); if (directory) $('project-parent').value = directory; } catch (error) { report(error); } });
 $('project-form').addEventListener('submit', async event => {
   event.preventDefault(); $('confirm-project').disabled = true; $('project-dialog-error').hidden = true;
   try {
     if (!$('project-parent').value) throw new Error('请先选择项目保存位置');
-    await projectAction(async () => { const project = await api.createProject($('project-name').value, $('project-parent').value);
+    await projectAction(async () => { const project = await api.createProject($('project-name').value, $('project-parent').value,document.querySelector('input[name="project-kind"]:checked').value);
     updateProject(project); $('project-dialog').close(); await chooseProject(project); });
   } catch (error) { $('project-dialog-error').textContent = error.message; $('project-dialog-error').hidden = false; }
   finally { $('confirm-project').disabled = false; }
@@ -712,8 +749,8 @@ document.querySelectorAll('[data-view]').forEach(button => button.addEventListen
 document.querySelectorAll('[data-window]').forEach(button => button.addEventListener('click', () => api.windowAction(button.dataset.window)));
 $('open-folder').addEventListener('click', async () => { try { await projectAction(async () => { const project = await api.openProject(); if (project) { updateProject(project); await chooseProject(project); } }); } catch (error) { report(error); } });
 $('go-home').addEventListener('click', () => { activeProject = null; clearProjectView(); $('open-file').replaceChildren(icon('plus'), document.createTextNode('打开模型')); renderProjects(); status('创意首页'); });
-$('open-file').addEventListener('click', async () => { try { if (activeProject) { await importProject(activeProject); return; } const result = await api.openFile(); if (result) { await setRoot(result.root); await loadModel(result.model); } } catch (error) { report(error); } });
-$('refresh').addEventListener('click', async () => { fileCache.clear(); try { if (activeProject) { await projectAction(async () => { const assetId = currentModel?.assetId, renderId = currentModel?.renderId; const project = await api.refreshProject(activeProject.id); updateProject(project); await chooseProject(project, false); if (assetId && project.models.some(item => item.id === assetId && item.exists)) await loadModel(await api.projectModel(project.id, assetId)); else if (renderId && project.images.some(r => r.id === renderId && r.exists)) await showProjectRender(project, project.images.find(r => r.id === renderId)); else clearProjectView(); }); } else { projectList = await api.listProjects(); renderProjects(); } status('项目与文件已刷新'); } catch (error) { report(error); } });
+$('open-file').addEventListener('click', async () => { try { if(activeProject?.kind==='plot'){await plotting.upload();return;} if (activeProject) { await importProject(activeProject); return; } const result = await api.openFile(); if (result) { await setRoot(result.root); await loadModel(result.model); } } catch (error) { report(error); } });
+$('refresh').addEventListener('click', async () => { fileCache.clear(); try { if (activeProject) { await projectAction(async () => { const figureId=plotting.current(), assetId = currentModel?.assetId, renderId = currentModel?.renderId; const project = await api.refreshProject(activeProject.id); updateProject(project); await chooseProject(project, false); if(project.kind==='plot'){if(figureId&&project.figures.some(f=>f.id===figureId))await plotting.openFigure(figureId);else clearProjectView();return;} if (assetId && project.models.some(item => item.id === assetId && item.exists)) await loadModel(await api.projectModel(project.id, assetId)); else if (renderId && project.images.some(r => r.id === renderId && r.exists)) await showProjectRender(project, project.images.find(r => r.id === renderId)); else clearProjectView(); }); } else { projectList = await api.listProjects(); renderProjects(); } status('项目与文件已刷新'); } catch (error) { report(error); } });
 $('toast').querySelector('button').addEventListener('click', () => $('toast').hidden = true);
 document.addEventListener('keydown', event => {
   if (document.querySelector('dialog[open]') || ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -724,7 +761,7 @@ let dragDepth = 0;
 document.addEventListener('dragenter', event => { event.preventDefault(); if (event.dataTransfer.types.includes('Files')) { dragDepth++; $('drop-zone').hidden = false; } });
 document.addEventListener('dragover', event => { event.preventDefault(); event.dataTransfer.dropEffect = 'copy'; });
 document.addEventListener('dragleave', event => { event.preventDefault(); if (--dragDepth <= 0) { dragDepth = 0; $('drop-zone').hidden = true; } });
-document.addEventListener('drop', async event => { event.preventDefault(); dragDepth = 0; $('drop-zone').hidden = true; const file = event.dataTransfer.files[0]; if (!file) return; try { if (activeProject) { await importProject(activeProject, 'all', event.dataTransfer.files); return; } const result = await api.dropFile(file); await setRoot(result.root); if (result.model) await loadModel(result.model); } catch (error) { report(error); } });
+document.addEventListener('drop', async event => { event.preventDefault(); dragDepth = 0; $('drop-zone').hidden = true; const file = event.dataTransfer.files[0]; if (!file) return; try { if(activeProject?.kind==='plot'){await plotting.upload(file);return;} if (activeProject) { await importProject(activeProject, 'all', event.dataTransfer.files); return; } const result = await api.dropFile(file); await setRoot(result.root); if (result.model) await loadModel(result.model); } catch (error) { report(error); } });
 renderer.setAnimationLoop(() => { if (content && !['render','reference'].includes(presentation)) { controls.update(); composer.render(); } });
 async function initialize() {
   try { const initial = await api.initial(); projectList = initial.projects || []; root = initial.root; activeProject = null; clearProjectView(); renderProjects(); status('创意首页'); }
@@ -732,10 +769,12 @@ async function initialize() {
 }
 window.workbenchModelContext = () => {
   if(!activeProject)return null;
+  if(activeProject.kind==='plot')return {projectId:activeProject.id,...plotting.context()};
   const selectedImage=presentation==='reference'?referenceImage:null,descriptor=selectedImage||currentModel;
   return {projectId:activeProject.id,assetId:descriptor?.projectId===activeProject.id?descriptor.assetId||null:null,renderId:descriptor?.projectId===activeProject.id?descriptor.renderId||null:null,renderHash:descriptor?.renderSha256||null,selectedStructure:selected?objectLabel(selected):null};
 };
 api.onCodexEvent(event => {
+  if(event.type==='plot-updated'){updateProject(event.project);renderProjects();if(activeProject?.id===event.source.projectId&&plotting.current()===event.source.figureId)plotting.openFigure(event.figure.id).then(()=>renderProjects());return;}
   if (!['model-updated', 'image-updated'].includes(event.type)) return;
   const currentContext=window.workbenchModelContext();
   const showResult = activeProject?.id === event.source.projectId && (currentContext?.assetId || null) === (event.source.assetId || null) && (event.source.assetId || (currentContext?.renderId || null) === (event.source.renderId || null));
@@ -760,7 +799,7 @@ api.onCodexEvent(event => {
 });
 // Read-only QA snapshots expose no filesystem operations.
 window.workbenchState = () => ({ screen: viewport.closest('.viewport-panel').dataset.screen, model: currentModel?.name, presentation, hasRender: !!currentModel?.renderUrl && currentModel.imageRole !== 'reference', hasReference: !!referenceImage, referenceId: referenceImage?.renderId || null, imageZoom: {render:imageZoom.render.state(),reference:imageZoom.reference.state()}, projectId: activeProject?.id || null, projectCount: projectList.length, selected: selected ? { uuid: selected.uuid, name: objectLabel(selected) } : null,
-  outlineCount: outline.selectedObjects.length, gridVisible:grid.visible, axesVisible:axes.visible, sceneBackground:scene.background.getHexString(), camera: camera.position.toArray(), target: controls.target.toArray(), meshCount: content ? meshCount(content) : 0,
+  outlineCount: outline.selectedObjects.length, gridVisible:grid.visible, axesVisible:axes.visible, sceneBackground:previewBackground.getHexString(), fogEnabled:!!scene.fog, transparentSceneBackground:scene.background===null, camera: camera.position.toArray(), target: controls.target.toArray(), meshCount: content ? meshCount(content) : 0,
   objects: content ? [...nodeById.values()].filter(node => node.isMesh).map(node => {
     const box = new THREE.Box3().setFromObject(node); const position = box.getCenter(new THREE.Vector3()).project(camera); const bounds = canvas.getBoundingClientRect();
     return { uuid: node.uuid, name: objectLabel(node), visible: visibleInHierarchy(node), screen: { x: bounds.left + (position.x + 1) * bounds.width / 2, y: bounds.top + (1 - position.y) * bounds.height / 2 } };

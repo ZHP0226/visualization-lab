@@ -47,13 +47,14 @@ class ProjectStore {
     this.projects.set(document.id, real);
     return refresh ? this.refresh(document.id) : this.snapshot(document.id);
   }
-  async create(name, parent) {
+  async create(name, parent, kind = 'modeling') {
     return this.mutate(async () => {
+      if (!['modeling','plot'].includes(kind)) throw new Error('请选择建模或数据绘图');
       name = String(name || '').trim();
       if (!name || name.length > 64 || /[<>:"/\\|?*\x00-\x1f]/.test(name) || /[. ]$/.test(name) || name === '.' || name === '..' || /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name)) throw new Error('请输入有效的项目名称');
       const directory = path.join(await fs.realpath(parent), name);
       try { await fs.mkdir(directory); } catch (error) { if (error.code === 'EEXIST') throw new Error('该目录已存在，请使用“打开项目”或换一个项目名称'); throw error; }
-      const document = { version: 1, id: randomUUID(), name, createdAt: new Date().toISOString(), models: [], renders: [], links: {} };
+      const document = { version: 1, id: randomUUID(), name, kind, createdAt: new Date().toISOString(), models: [], renders: [], links: {}, ...(kind === 'plot' ? { figures: [] } : {}) };
       await this.write(directory, document); this.projects.set(document.id, directory);
       return this.snapshot(document.id);
     });
@@ -69,7 +70,7 @@ class ProjectStore {
     }));
     const images = await assets(document.renders,'render');
     for (const image of images) { image.kind = image.imageRole === 'reference' ? 'reference' : 'render'; image.relatedModelIds = document.models.filter(m => m.referenceIds.includes(image.id)).map(m => m.id); image.relatedRenderIds = document.renders.filter(r => (r.referenceIds || []).includes(image.id)).map(r => r.id); }
-    return { id, name: document.name, directory, rootId: root.id, models: await assets(document.models, 'model'), renders: images.filter(r => r.imageRole !== 'reference'), references: images.filter(r => r.imageRole === 'reference'), images, links: document.links };
+    return { id, name: document.name, kind: document.kind === 'plot' ? 'plot' : 'modeling', figures: document.figures || [], directory, rootId: root.id, models: await assets(document.models, 'model'), renders: images.filter(r => r.imageRole !== 'reference'), references: images.filter(r => r.imageRole === 'reference'), images, links: document.links };
   }
   async list() { const projects = []; for (const id of this.projects.keys()) projects.push(await this.snapshot(id)); return projects; }
   async refresh(id) {

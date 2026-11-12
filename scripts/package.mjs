@@ -28,7 +28,7 @@ if(process.env.VL_TELEMETRY_CONFIG){
 await fs.writeFile(path.join(appDir,'package.json'),JSON.stringify({name:metadata.name,version:metadata.version,main:metadata.main,license:metadata.license,author:metadata.author}));
 await fs.cp(path.join(root,'licenses'),path.join(destination,'licenses'),{recursive:true});
 await fs.copyFile(path.join(destination,'LICENSE'),path.join(destination,'licenses/Electron-runtime.txt'));
-for(const name of ['LICENSE','THIRD-PARTY-NOTICES.md','README.md','CHANGELOG.md'])await fs.copyFile(path.join(root,name),path.join(destination,name));
+for(const name of ['LICENSE','THIRD-PARTY-NOTICES.md','README.md','CHANGELOG.md','requirements-plotting.txt'])await fs.copyFile(path.join(root,name),path.join(destination,name));
 await fs.cp(path.join(root,'docs'),path.join(destination,'docs'),{recursive:true});
 await fs.cp(path.join(root,'examples'),path.join(destination,'examples'),{recursive:true,filter:f=>!f.endsWith('.blend1')&&!f.endsWith('.pyc')&&path.basename(f)!=='__pycache__'});
 console.log('Prepared local portable application: '+destination);

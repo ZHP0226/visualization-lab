@@ -6,7 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 await fs.mkdir(path.join(root, 'dist'), { recursive: true });
 await build({ entryPoints: [path.join(root, 'src/renderer.js')], outfile: path.join(root, 'dist/renderer.js'), bundle: true, format: 'esm', minify: true, target: 'chrome140', legalComments: 'eof' });
 await build({ entryPoints: [path.join(root,'src/startup-boot.js')],outfile:path.join(root,'dist/startup-boot.js'),bundle:true,format:'iife',minify:true,target:'chrome140' });
-for (const name of ['index.html', 'style.css', 'presentation.css', 'projects.css', 'chat.css', 'point-edit.css', 'liquid-glass.css', 'appearance.css', 'startup.css','fluid-motion.css']) await fs.copyFile(path.join(root, 'src', name), path.join(root, 'dist', name));
+for (const name of ['index.html', 'style.css', 'presentation.css', 'projects.css', 'chat.css', 'point-edit.css', 'liquid-glass.css', 'appearance.css', 'startup.css','fluid-motion.css','plotting.css']) await fs.copyFile(path.join(root, 'src', name), path.join(root, 'dist', name));
 await fs.cp(path.join(root, 'assets/fonts'), path.join(root, 'dist/fonts'), { recursive: true });
 await fs.mkdir(path.join(root, 'dist/branding'), { recursive: true });
 await fs.copyFile(path.join(root, 'assets/branding/visualization-lab-logo-v1.svg'), path.join(root, 'dist/branding/visualization-lab-logo-v1.svg'));

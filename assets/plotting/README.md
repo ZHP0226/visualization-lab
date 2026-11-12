@@ -1,0 +1,2 @@
+80份模板来自本项目独立编写并经用户认可的50mm图库；Python/Matplotlib绘图，原始示例数据由固定种子生成。未包含外部模板项目源码。
+运行需本机Python及NumPy、SciPy、Matplotlib、scikit-learn。

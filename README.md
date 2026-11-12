@@ -4,21 +4,43 @@
 
 # 可视化实验室
 
-把参考、模型和成图放在同一个工作台里。
+把建模、成图和数据绘图放在同一个工作台里。
 
 可视化实验室是我在做的一个本地创作工作台。画图时，参考图、建模软件和聊天窗口往往各在一处；我想把这些环节接起来，让你一边看效果，一边和 AI 讨论怎么改，参考、工程和修改记录都按项目保存在本机。
 
-**1.0.0 先提供三维建模与成图工作流，目前支持 Blender 和 Cinema 4D。** 数据绘图会放在后续版本里。
+**1.0.1 新增数据绘图。** 左侧项目栏分为“建模”和“数据绘图”；三维建模继续支持 Blender 和 Cinema 4D。
 
-### [↓ 下载 Windows 版 · 1.0.0](https://github.com/ZHP0226/visualization-lab/releases/download/v1.0.0/VisualizationLab-v1.0.0-windows-x64.zip)
+### [↓ 下载 Windows 版 · 1.0.1](https://github.com/ZHP0226/visualization-lab/releases/download/v1.0.1/VisualizationLab-v1.0.1-windows-x64.zip)
 
 Windows 10 / 11，64 位，解压后即可打开。
 
-[版本下载页](https://github.com/ZHP0226/visualization-lab/releases) · [使用指南](docs/使用指南.md) · [完整案例](examples/dark-metal-chip/README.md) · [反馈问题](https://github.com/ZHP0226/visualization-lab/issues)
+[版本下载页](https://github.com/ZHP0226/visualization-lab/releases) · [使用指南](docs/使用指南.md) · [建模案例](examples/dark-metal-chip/README.md) · [绘图示例](examples/nature-four-panel/README.md) · [反馈问题](https://github.com/ZHP0226/visualization-lab/issues)
 
-[![1.0.0 浅色全屏工作台，结构、成图和参考同时查看](docs/images/workbench-fullscreen-light.png)](docs/images/workbench-fullscreen-light.png)
+[![建模工作台，结构、成图和参考同时查看](docs/images/workbench-fullscreen-light.png)](docs/images/workbench-fullscreen-light.png)
 
 *上图是实际工作台的浅色全屏截图，点开可以查看原图。参考、模型和成图放在一起，修改时方便对照。*
+
+## 数据绘图：从模板到一张完整组合图
+
+[![1.0.1 实际绘图界面：数据、代码、毫米标尺与组合图](docs/images/workbench-plotting-light.png)](docs/images/workbench-plotting-light.png)
+
+内置 **80 个二维/三维绘图模板、17 项期刊风格**。字体、字号、线宽和单/双栏宽度由固定规则控制，组合分图尽量减少多余留白。
+
+底部点“模板”“期刊”“版式”，选择会直接写进对话，例如：
+
+> 给这份数据画一张组合图，a 图用【模板1：单曲线／多曲线图】，b 图用【模板41：二维标量场】，使用【期刊：Nature 主刊】【版式：单栏】，两幅图配色统一。
+
+同一条消息可以给不同分图指定不同模板。点击“生成示例”可先离线看模板；连接 AI 后再用自己的数据绘图。已有图也可通过“应用期刊与版式”保存新修订。支持 Excel/CSV/TSV 数据、分图数据表与绘图代码联动，导出 PDF 与 Excel，项目保留 SVG、PNG、代码和历史修订。
+
+预览提供 **毫米标尺和 5 mm 淡网格**，可开关，便于判断实际尺寸，不进入导出的 PDF/SVG，也不影响选取数据点。
+
+![Nature 风格单栏四分图：二维曲线、标量场、三维曲面和散点](examples/nature-four-panel/preview.png)
+
+随附 [Nature 单栏四分图项目](examples/nature-four-panel/README.md)：89 × 88 mm，四幅图用不同模板，统一蓝—青配色，包含 Excel、Python、PDF/SVG/PNG。**这是合成数据演示。** 期刊条目是固定外观预设，使用前应核对目标期刊要求。
+
+可选风格：Nature 主刊、Nature 系列、Science 主刊、Science Advances、Cell Press、Springer、Elsevier、Wiley、ACS、APS、AIP、Optica、Optics Express、IEEE、IOP、PNAS、自定义。
+
+绘图与重新运行示例需要本机 **Python 3 + NumPy、SciPy、Matplotlib、scikit-learn**，可执行 `python -m pip install -r requirements-plotting.txt`，然后在绘图栏“Python 环境”选择该 Python。Windows 包不内置 Python；查看已生成的示例无需安装。
 
 ## 想改哪里，就在那一处右击
 
@@ -50,6 +72,8 @@ Windows 10 / 11，64 位，解压后即可打开。
 
 **再看附带的例子。** 将 `examples/dark-metal-chip` 整个文件夹复制到自己的工作目录，在软件左侧点“打开项目”，选择其中的 `dark-metal-chip-demo`。点击 `MetalChip_v002.glb`，再切换“对照”，就能同时看到结构、成图和参考。浏览这个例子不需要先连接 AI，也不需要安装 C4D。
 
+**看绘图示例。** 把 `examples/nature-four-panel` 复制到自己的工作目录，点“打开项目”选择 `nature-four-panel-demo`。要新建绘图项目，在新建项目时选择“数据绘图”。
+
 **想自己做图时，再连接 AI。** 软件会检测本机 Agent，也有手动配置程序和 API 的入口。连接后，新建自己的项目，放入参考图，说明想做什么、哪些地方要保留，再逐步检查和修改。当前可以接入 Codex、Claude Code、Gemini CLI、OpenCode；不同连接实际能做什么，取决于它的模型、工具和权限。
 
 AI 账户、API 额度和需要调用的建模软件由你自己准备。要重新制作附带的芯片案例，需要安装 C4D；用 Blender 做自己的项目，也需要先安装 Blender。[详细操作见使用指南](docs/使用指南.md)。
@@ -62,6 +86,7 @@ AI 账户、API 额度和需要调用的建模软件由你自己准备。要重�
 | 检查模型和效果 | 预览 GLB / glTF、FBX、OBJ；切换结构、成图、参考和对照视图 |
 | 右击局部修改 | 右击三维部件、结构树或图片位置，保存修改要求，再统一发送给 AI |
 | 接着之前的工作往下做 | 保留项目聊天、修改记录和已交付版本 |
+| 绘制数据图和组合分图 | 80 个模板、17 项期刊外观预设，单/双栏、分图独立数据和毫米标尺 |
 | 调整成自己顺手的界面 | 切换浅色 / 深色，调整字号和面板大小 |
 
 ## 想看实际操作，可以关注我
@@ -91,8 +116,8 @@ npm run dev
 
 `dev` 使用独立的 `.local` 用户配置，测试统计只写本地；`npm start` 使用正常用户配置。运行库安装需要联网，网络中断时可重试。
 
-打包需要 Python 3，执行 `npm run build` 和 `npm run package`，输出为 `release/VisualizationLab-v1.0.0-windows-x64`。已有目录不会覆盖，可通过 `--out` 指定新位置。自行分发修改版时，请将统计配置换成自己的项目或清空 token。
+打包需要 Python 3，执行 `npm run build` 和 `npm run package`，输出为 `release/VisualizationLab-v1.0.1-windows-x64`。已有目录不会覆盖，可通过 `--out` 指定新位置。自行分发修改版时，请将统计配置换成自己的项目或清空 token。
 
-[开发与构建](docs/开发与构建.md) · [本地验证记录](docs/本地验收.md) · [参与贡献](CONTRIBUTING.md) · [1.0.0 发布说明](CHANGELOG.md)
+[开发与构建](docs/开发与构建.md) · [本地验证记录](docs/本地验收.md) · [参与贡献](CONTRIBUTING.md) · [1.0.1 发布说明](CHANGELOG.md)
 
 </details>
