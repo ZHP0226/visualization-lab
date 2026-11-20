@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "referenceSha256": "填写本轮原图SHA-256",
+  "finalSha256": "填写最终PNG的SHA-256",
+  "anchors": ["底座椭圆和顶盖外缘约束机位", "玻璃左缘有连续的白色竖向高光"],
+  "trials": [
+    { "file": "trial-strip-narrow.png", "category": "lighting", "change": "左条形灯宽度 40", "observation": "玻璃高光偏窄" },
+    { "file": "trial-strip-wide.png", "category": "lighting", "change": "左条形灯宽度 75", "observation": "高光宽度更接近原图，采用这一版" }
+  ],
+  "summary": "构图和玻璃高光更接近，底座反射仍偏暗。"
+}

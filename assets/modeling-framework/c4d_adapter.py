@@ -25,18 +25,41 @@ if a.replay_output:
     before=digest(native);render(load(),a.replay_output);assert digest(native)==before;print('FRAMEWORK_REPLAY_OK')
 else:
     if plan['camera']['projection']!='perspective':raise ValueError('The verified C4D baseline currently supports perspective; implement and verify an explicit orthographic camera adapter before using it.')
-    doc=c4d.documents.BaseDocument();mats={};groups={}
+    doc=c4d.documents.BaseDocument();mats={};groups={};imported={};assembly=getattr(a,'assembly_sources',[])
+    for part in assembly:
+        file=part['native']['file']
+        if digest(file)!=part['native']['sha256']:raise ValueError('Native component changed before import')
+        source=c4d.documents.LoadDocument(str(file),c4d.SCENEFILTER_OBJECTS|c4d.SCENEFILTER_MATERIALS,None)
+        if source is None:raise ValueError('Independent C4D component could not be opened')
+        material_cache={}
+        def copy_materials(obj):
+            for tag in obj.GetTags():
+                if tag.GetType()==c4d.Ttexture and tag.GetMaterial():
+                    m=tag.GetMaterial();key=m.GetName()
+                    if key not in material_cache:
+                        clone=m.GetClone();clone.SetName(part['id']+'_'+key);doc.InsertMaterial(clone);material_cache[key]=clone
+                    tag.SetMaterial(material_cache[key])
+            child=obj.GetDown()
+            while child:copy_materials(child);child=child.GetNext()
+        for key in part['objectIds']:
+            obj=source.SearchObject(key)
+            if obj is None:raise ValueError('Independent native component is missing '+key)
+            clone=obj.GetClone();clone.SetMg(obj.GetMg());copy_materials(clone);imported[key]=clone
     for spec in plan['materials']:
         m=c4d.Material();m.SetName(spec['id']);m[c4d.MATERIAL_COLOR_COLOR]=c4d.Vector(*spec['color']);m[c4d.MATERIAL_USE_REFLECTION]=False;m[c4d.MATERIAL_USE_SPECULAR]=True;m[c4d.MATERIAL_SPECULAR_WIDTH]=spec.get('roughness',.5);doc.InsertMaterial(m);mats[spec['id']]=m
     for spec in plan['objects']:
         shape=spec['shape'];size=spec['size']
-        if shape=='box':obj=c4d.BaseObject(c4d.Ocube);obj[c4d.PRIM_CUBE_LEN]=c4d.Vector(size[0],size[2],size[1])
+        if assembly:
+            if spec['id'] not in imported:raise ValueError('Missing independently built native component')
+            obj=imported[spec['id']]
+        elif shape=='box':obj=c4d.BaseObject(c4d.Ocube);obj[c4d.PRIM_CUBE_LEN]=c4d.Vector(size[0],size[2],size[1])
         elif shape=='sphere':obj=c4d.BaseObject(c4d.Osphere);obj[c4d.PRIM_SPHERE_RAD]=1;obj[c4d.PRIM_SPHERE_SUB]=32;obj.SetAbsScale(c4d.Vector(size[0]/2,size[2]/2,size[1]/2))
         elif shape=='cylinder':obj=c4d.BaseObject(c4d.Ocylinder);obj[c4d.PRIM_CYLINDER_RADIUS]=1;obj[c4d.PRIM_CYLINDER_HEIGHT]=2;obj[c4d.PRIM_CYLINDER_SEG]=48;obj.SetAbsScale(c4d.Vector(size[0]/2,size[2]/2,size[1]/2))
         else:raise ValueError('Custom geometry requires a project-specific builder using the common audit/export utilities.')
         obj.SetName(spec['id']);group=spec.get('group','Structure')
         if group not in groups:groups[group]=c4d.BaseObject(c4d.Onull);groups[group].SetName(group);doc.InsertObject(groups[group])
-        obj.InsertUnderLast(groups[group]);obj.SetAbsPos(vec(spec['position']));tag=c4d.TextureTag();tag.SetMaterial(mats[spec['material']]);obj.InsertTag(tag);obj.MakeTag(c4d.Tphong)
+        obj.InsertUnderLast(groups[group])
+        if not assembly:obj.SetAbsPos(vec(spec['position']));tag=c4d.TextureTag();tag.SetMaterial(mats[spec['material']]);obj.InsertTag(tag);obj.MakeTag(c4d.Tphong)
     c=plan['camera'];cam=c4d.BaseObject(c4d.Ocamera);cam.SetName('Camera');doc.InsertObject(cam);cam.SetAbsPos(vec(c['position']));aim(cam,c['target']);cam[c4d.CAMERA_FOCUS]=c.get('focalLength',45);doc.GetRenderBaseDraw().SetSceneCamera(cam)
     for index,spec in enumerate(plan['lights']):
         light=c4d.BaseObject(c4d.Olight);light.SetName('Light_'+str(index));doc.InsertObject(light);light.SetAbsPos(vec(spec['position']));aim(light,c['target']);light[c4d.LIGHT_TYPE]=c4d.LIGHT_TYPE_AREA;light[c4d.LIGHT_COLOR]=c4d.Vector(*spec['color']);light[c4d.LIGHT_BRIGHTNESS]=spec['power']/500.;light[c4d.LIGHT_AREADETAILS_SIZEX]=spec['size'];light[c4d.LIGHT_AREADETAILS_SIZEY]=spec['size'];light[c4d.LIGHT_SHADOWTYPE]=c4d.LIGHT_SHADOWTYPE_AREA
@@ -54,5 +77,5 @@ else:
         meshes.append(dict(id=spec['id'],vertices=points,triangles=triangles))
     geometry_audit(plan,meshes);write_glb(a.stem+'.glb',plan,meshes)
     if not a.no_render:render(doc,a.stem+'.png')
-    write_audit(a.plan,plan,a.stem,meshes,'c4d',c4d.GetC4DVersion(),native,None if a.no_render else a.stem+'.png',dict(engine='C4D Standard',width=int(rd[c4d.RDATA_XRES]),height=int(rd[c4d.RDATA_YRES]),antialiasingMin=1,antialiasingMax=4,materialModel='Legacy color/specular width; metallic is GLB metadata only',trueColorDithering=False,seedApplicability='No stochastic procedural geometry is used; Cycles sample/seed parameters are not C4D renderer parameters.'))
+    write_audit(a.plan,plan,a.stem,meshes,'c4d',c4d.GetC4DVersion(),native,None if a.no_render else a.stem+'.png',dict(engine='C4D Standard',width=int(rd[c4d.RDATA_XRES]),height=int(rd[c4d.RDATA_YRES]),antialiasingMin=1,antialiasingMax=4,materialModel='Legacy color/specular width; metallic is GLB metadata only',trueColorDithering=False,seedApplicability='No stochastic procedural geometry is used; Cycles sample/seed parameters are not C4D renderer parameters.'),assembly)
     print('FRAMEWORK_BUILD_AND_AUDIT_OK')

@@ -45,7 +45,7 @@
   </defs></svg>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="ambient ambient-three"></div>
   <header class="titlebar">
-    <div class="brand"><img class="brand-logo" src="./branding/visualization-lab-logo-v1.svg" alt="可视化实验室 · Visualization Lab" width="258" height="86" draggable="false"><span class="version">1.0.1</span></div>
+    <div class="brand"><img class="brand-logo" src="./branding/visualization-lab-logo-v1.svg" alt="可视化实验室 · Visualization Lab" width="258" height="86" draggable="false"><span class="version">1.1.0</span></div>
     <div class="titlebar-actions"><span class="local-status"><i></i> 本地工作台</span><button id="open-settings" class="icon-button" aria-label="打开设置" title="设置"><svg><use href="#i-settings"/></svg></button><button id="open-file" class="button primary"><svg><use href="#i-plus"/></svg>打开模型</button><div class="window-actions"><button data-window="minimize" aria-label="最小化"><svg><use href="#i-minus"/></svg></button><button data-window="maximize" aria-label="最大化或还原"><svg><use href="#i-max"/></svg></button><button data-window="close" aria-label="关闭工作台"><svg><use href="#i-close"/></svg></button></div></div>
   </header>
   <main class="workspace">
@@ -68,7 +68,7 @@
       <div id="viewport" class="viewport" tabindex="0" aria-label="三维视图，拖动旋转，滚轮缩放，点击选择部件；F 聚焦，Escape 取消选择"><canvas id="scene-canvas"></canvas></div>
       <div id="empty-project" class="empty-project" hidden><svg><use href="#i-folder"/></svg><strong>项目已准备好</strong><span>从左侧“模型”和“成片”导入文件</span><span>相同前缀自动对应，也可点击链接图标手动指定</span></div>
       <span class="structure-view-label">三维结构 · 可旋转、选择</span>
-      <figure id="render-pane" class="render-pane" hidden><figcaption>成图<span>滚轮缩放 · 放大后拖动</span><button id="reset-render-zoom" type="button" class="text-button" aria-label="复位成图缩放">适配</button></figcaption><div class="render-image-wrap"><img id="final-render" alt="当前模型的最终渲染成图" draggable="false"><span id="point-edit-marker" hidden aria-hidden="true"></span><span id="render-empty" class="image-empty" hidden>暂无成图</span></div></figure>
+      <figure id="render-pane" class="render-pane" hidden><figcaption>成图<span>滚轮缩放 · 放大后拖动</span><button id="open-look-review" type="button" class="text-button" hidden>复刻过程</button><button id="reset-render-zoom" type="button" class="text-button" aria-label="复位成图缩放">适配</button></figcaption><div class="render-image-wrap"><img id="final-render" alt="当前模型的最终渲染成图" draggable="false"><span id="point-edit-marker" hidden aria-hidden="true"></span><span id="render-empty" class="image-empty" hidden>暂无成图</span></div></figure>
       <figure id="reference-pane" class="render-pane reference-pane" hidden><figcaption><span id="reference-caption-title">参考</span><select id="reference-select" aria-label="选择参考图片"></select><button id="reset-reference-zoom" type="button" class="text-button" aria-label="复位参考缩放">适配</button></figcaption><div class="render-image-wrap"><img id="reference-render" alt="当前参考图片" draggable="false"><span id="reference-point-marker" hidden aria-hidden="true"></span><span id="reference-empty" class="image-empty">暂无参考</span></div></figure><span id="structure-empty" class="structure-empty" hidden>暂无结构模型</span>
       <div id="loading" class="loading-overlay" hidden><div class="glass loading-card"><span class="spinner"></span><span id="loading-text">正在加载模型</span></div></div>
       <div id="drop-zone" class="drop-zone" hidden><div><svg><use href="#i-upload"/></svg><strong>松开以打开模型</strong><span>GLB · glTF · FBX · OBJ 或文件夹</span></div></div>
@@ -102,6 +102,15 @@
   <footer class="statusbar"><span><i class="status-dot"></i><span id="status-text" role="status" aria-live="polite">正在启动</span></span><span>模型与成图保存在本机<span class="status-separator">/</span><kbd>F</kbd> 聚焦<span class="status-separator">/</span><kbd>Esc</kbd> 取消选择</span></footer>
   <div id="toast" class="toast glass" role="alert" hidden><span></span><button class="icon-button" aria-label="关闭提示"><svg><use href="#i-close"/></svg></button></div>
   <dialog id="project-dialog" class="project-dialog glass" aria-labelledby="project-dialog-title"><form id="project-form"><div class="dialog-heading"><h2 id="project-dialog-title">添加本机项目</h2><button type="button" class="icon-button" id="close-project-dialog" aria-label="取消添加项目"><svg><use href="#i-close"/></svg></button></div><fieldset class="project-kind-options"><legend>项目类型</legend><label><input type="radio" name="project-kind" value="modeling" checked><span>建模<small>三维结构、参考与成图</small></span></label><label><input type="radio" name="project-kind" value="plot"><span>数据绘图<small>Excel、Python 与 PDF</small></span></label></fieldset><label>项目名称<input id="project-name" required maxlength="64" autocomplete="off" placeholder="例如：第0期"></label><label>保存位置<div class="directory-field"><input id="project-parent" required readonly placeholder="选择本机目录"><button type="button" id="choose-project-directory" class="button">选择目录</button></div></label><p class="dialog-hint">在所选位置新建同名项目目录。“参考”“模型”“成片”为虚拟分组，文件保存在项目目录中。</p><p id="project-dialog-error" class="dialog-error" role="alert" hidden></p><button type="submit" class="button primary" id="confirm-project">创建项目</button></form></dialog>
+  <dialog id="look-review-dialog" class="project-dialog look-review-dialog" aria-labelledby="look-review-title">
+    <div class="dialog-heading"><h2 id="look-review-title">复刻过程</h2><form method="dialog"><button class="icon-button" aria-label="关闭复刻过程">×</button></form></div>
+    <label>试渲染阶段<select id="look-review-stage"></select></label>
+    <div class="look-review-images">
+      <figure><figcaption>参考原图</figcaption><img id="look-review-reference" alt="用于单图复刻的参考图"></figure>
+      <figure><figcaption>本阶段渲染</figcaption><img id="look-review-image" alt="当前试渲染"></figure>
+    </div>
+    <p id="look-review-note"></p><p id="look-review-summary" class="dialog-hint"></p>
+  </dialog>
   <dialog id="pair-dialog" class="project-dialog glass" aria-labelledby="pair-dialog-title"><form id="pair-form"><div class="dialog-heading"><h2 id="pair-dialog-title">设置参考、模型与成图对应</h2><button type="button" class="icon-button" id="close-pair-dialog" aria-label="取消设置对应"><svg><use href="#i-close"/></svg></button></div><label>模型<select id="pair-model" required></select></label><label>对应成图<select id="pair-render"></select></label><fieldset class="reference-associations"><legend>对应参考（可多选）</legend><div id="pair-references"></div></fieldset><p class="dialog-hint">一个模型可使用多张参考，同一参考可供多个模型使用。渲染成图仍与具体模型一一对应，参考不会充当模型成图。</p><p id="pair-dialog-error" class="dialog-error" role="alert" hidden></p><button type="submit" class="button primary" id="confirm-pair">保存对应</button></form></dialog>
   <dialog id="point-edit-dialog" aria-labelledby="point-edit-title" aria-describedby="point-edit-target">
     <form id="point-edit-form">
@@ -120,7 +129,7 @@
     <section class="settings-section"><h3>显示与动效</h3><label class="settings-row"><span>玻璃边缘折射<small>关闭后减少图形开销</small></span><input id="settings-refraction" type="checkbox"></label><label class="settings-row" for="settings-motion"><span>界面动效</span><select id="settings-motion"><option value="system">跟随系统</option><option value="reduced">减少动效</option></select></label></section>
     <section class="settings-section"><h3>AI 连接</h3><p class="settings-description">配置 API 服务，或手动指定本机 AI 程序。</p><button id="settings-ai-connections" class="button" type="button">AI 接入</button></section>
     <section class="settings-section"><h3>三维辅助</h3><label class="settings-row"><span>显示网格</span><input id="settings-grid" type="checkbox"></label><label class="settings-row"><span>显示坐标轴</span><input id="settings-axes" type="checkbox"></label></section>
-    <div class="settings-about"><span>可视化工作台 0.33</span><span><kbd>F</kbd> 聚焦 · <kbd>Esc</kbd> 取消选择</span></div><p id="settings-save-status" class="settings-description" role="status">调整会自动保存在本机</p><p id="settings-error" role="alert"></p>
+    <div class="settings-about"><span>可视化工作台 1.1.0</span><span><kbd>F</kbd> 聚焦 · <kbd>Esc</kbd> 取消选择</span></div><p id="settings-save-status" class="settings-description" role="status">调整会自动保存在本机</p><p id="settings-error" role="alert"></p>
   </dialog>
   <dialog id="ai-connections-dialog" class="project-dialog ai-connections-dialog" aria-labelledby="ai-connections-title">
     <form id="ai-config-form">

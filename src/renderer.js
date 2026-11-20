@@ -424,9 +424,11 @@ function setPresentation(mode, fit = true) {
 function configureRender(descriptor, preferredMode = null) {
   const image = $('final-render');
   const finalUrl = descriptor.imageRole === 'reference' ? null : descriptor.renderUrl;
+  $('open-look-review').hidden = !finalUrl || !descriptor.lookReview;
   image.onerror = () => {
     if (currentModel !== descriptor) return;
     descriptor.renderUrl = null;
+    $('open-look-review').hidden = true;
     setPresentation('structure');
     document.querySelectorAll('button[data-presentation]').forEach(button => { if (button.dataset.presentation !== 'structure') button.disabled = true; });
     notify('模型已打开，但配套成图未能读取，请检查图片文件。');
@@ -441,6 +443,25 @@ function configureRender(descriptor, preferredMode = null) {
   });
   setPresentation(preferredMode || (descriptor.imageRole==='reference'?'reference':finalUrl?(content?'compare':'render'):content?'structure':referenceImage?'reference':'structure'));
 }
+const lookDialog = $('look-review-dialog');
+function showLookStage() {
+  const entry = currentModel?.lookReview?.entries[Number($('look-review-stage').value)];
+  if (!entry) return;
+  $('look-review-image').src = entry.url;
+  $('look-review-image').alt = entry.label;
+  $('look-review-note').textContent = entry.note;
+  $('look-review-note').hidden = !entry.note;
+}
+$('open-look-review').addEventListener('click', () => {
+  const review = currentModel?.lookReview;
+  if (!review) return;
+  $('look-review-stage').replaceChildren(...review.entries.map((item, index) => new Option(item.label, index)));
+  $('look-review-reference').src = review.referenceUrl;
+  $('look-review-summary').textContent = review.summary;
+  showLookStage();
+  lookDialog.showModal();
+});
+$('look-review-stage').addEventListener('change', showLookStage);
 function configureReferences(refs, preferredId = referenceImage?.renderId) {
   $('reference-select').replaceChildren(...refs.map(r=>new Option(r.name,r.renderId)));$('reference-select').disabled=refs.length<2;
   showReference(refs.find(r=>r.renderId===preferredId)||refs[0]||null);

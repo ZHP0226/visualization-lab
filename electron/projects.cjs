@@ -3,6 +3,7 @@ const path = require('node:path');
 const { randomUUID, createHash } = require('node:crypto');
 const { MODEL_EXTENSIONS, inside } = require('./files.cjs');
 const relations = require('./asset-relations.cjs');
+const look = require('./look-review.cjs');
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp']);
 const MANIFEST = '.visualization-project.json';
 const prefix = filename => path.parse(filename).name.replace(/\.render$/i, '').normalize('NFC').trim().toLocaleLowerCase('en-US');
@@ -203,7 +204,8 @@ class ProjectStore {
     const render = project.renders.find(render => render.id === project.links[modelId] && render.exists);
     const sha256 = await hash(await this.library.resolve(project.rootId, item.path)), renderSha256 = render ? await hash(await this.library.resolve(project.rootId, render.path)) : null;
     const referenceImages = await Promise.all(project.references.filter(r => item.referenceIds.includes(r.id) && r.exists).map(r => this.imageDescriptor(project,r)));
-    return { ...descriptor, url: descriptor.url + '?revision=' + sha256, sha256, subject: item.subject, referenceIds: item.referenceIds, referenceImages, renderStale: !!item.renderStale, renderSha256, renderUrl: render ? render.url + '?revision=' + renderSha256 : null, projectId: id, assetId: modelId, renderId: render?.id || null };
+    const lookReview = await look.previews(this.library, project.rootId, item.path, renderSha256, referenceImages);
+    return { ...descriptor, url: descriptor.url + '?revision=' + sha256, sha256, subject: item.subject, referenceIds: item.referenceIds, referenceImages, lookReview, renderStale: !!item.renderStale, renderSha256, renderUrl: render ? render.url + '?revision=' + renderSha256 : null, projectId: id, assetId: modelId, renderId: render?.id || null };
   }
   async imageSource(project,image,expectedHash) {
     let file = await this.library.resolve(project.rootId,image.path), digest = await hash(file), historical = false;

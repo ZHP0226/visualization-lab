@@ -8,6 +8,7 @@ const { ProjectStore } = require('../electron/projects.cjs');
 const { DeliveryManager, baseName, renderRequested, AGENT_INSTRUCTIONS } = require('../electron/delivery.cjs');
 const { deliveryIntent } = require('../electron/delivery-policy.cjs');
 const { readGLB } = require('../electron/model-edit.cjs');
+const framework = require('../electron/modeling-framework.cjs');
 function movedModel(buffer) {
   const { json, binary } = readGLB(buffer); json.nodes[0].translation = [0.125, 0, 0];
   const text = Buffer.from(JSON.stringify(json)), body = Buffer.alloc(Math.ceil(text.length / 4) * 4, 32); text.copy(body);
@@ -16,6 +17,9 @@ function movedModel(buffer) {
   return Buffer.concat([header, body, binHeader, binary]);
 }
 async function fixture(t) {
+  // This suite isolates naming, file safety and revision policy. The mandatory
+  // split/gray/native-assembly gate is exercised unmocked in modeling-framework.
+  t.mock.method(framework, 'verify', async () => null);
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'workbench-delivery-'));
   t.after(() => fs.rm(root, { recursive: true, force: true }));
   const library = new FileLibrary(), projects = new ProjectStore(library), project = await projects.create('芯片测试', root);

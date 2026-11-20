@@ -2,11 +2,15 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { createHash } = require('node:crypto');
 const { readGLB } = require('./model-edit.cjs');
-const VERSION = '1.0.0';
+const look = require('./look-review.cjs');
+const split = require('./component-workflow.cjs');
+const VERSION = '1.1.0';
 const DIRECTORY = path.resolve(__dirname, '../assets/modeling-framework');
-const CODE = ['common.py', 'run.py', 'blender_adapter.py', 'c4d_adapter.py'];
+const CODE = ['common.py', 'run.py', 'blender_adapter.py', 'c4d_adapter.py', 'component_workflow.py'];
 const sha = data => createHash('sha256').update(data).digest('hex');
 const vector = v => Array.isArray(v) && v.length === 3 && v.every(Number.isFinite);
+const requiresLookReview = delivery => !!delivery.reference && !delivery.source && delivery.mode !== 'render_only';
+const requiresComponents = delivery => !delivery.source && delivery.mode !== 'render_only' && (!!delivery.reference || delivery.mode === 'revision' || delivery.intent?.operation === 'model_edit');
 function validatePlan(p) {
   if (p?.schemaVersion !== 1 || p.coordinateSystem !== 'Z_UP_RIGHT_HANDED' || !p.subject?.trim() || !Array.isArray(p.assumptions) || p.assumptions.some(s => typeof s !== 'string')) throw new Error('结构方案需要主题、坐标系与明确的假设清单');
   if (!Array.isArray(p.materials) || !p.materials.length || new Set(p.materials.map(m => m.id)).size !== p.materials.length || p.materials.some(m => !m.id || !vector(m.color) || m.color.some(c => c < 0 || c > 1) || ['metallic','roughness'].some(k => m[k] !== undefined && (!Number.isFinite(m[k]) || m[k] < 0 || m[k] > 1)))) throw new Error('材质ID、颜色或参数无效');
@@ -16,11 +20,17 @@ function validatePlan(p) {
   if (!r || !Number.isInteger(r.width) || !Number.isInteger(r.height) || r.width < 16 || r.width > 8192 || r.height < 16 || r.height > 8192 || !Number.isInteger(r.samples) || r.samples < 1 || r.samples > 4096 || !Number.isInteger(r.seed) || r.seed < 0 || r.seed >= 2147483647) throw new Error('渲染尺寸、采样与种子无效');
   if (!Array.isArray(p.lights) || !p.lights.length || p.lights.some(l => !vector(l.position) || !vector(l.color) || l.color.some(c => c < 0 || c > 1) || !Number.isFinite(l.power) || l.power <= 0 || !Number.isFinite(l.size) || l.size <= 0)) throw new Error('需要明确的灯光布局');
   if (!p.review || !['pending','reviewed'].includes(p.review.status) || !Array.isArray(p.review.differences) || p.review.differences.some(s => typeof s !== 'string')) throw new Error('需要记录成图核对状态与剩余差异，不得自动宣称视觉验收通过');
+  if (p.components !== undefined) split.validateComponents(p);
   return p;
 }
 function context(delivery) {
-  return { version: VERSION, directory: DIRECTORY, required: !!delivery.reference,
-    stages: ['拆解整体结构并保存structure.json', '复用代码建模、重开原工程、导出与实际渲染并核验audit.json'],
+  return { version: VERSION, directory: DIRECTORY, required: !!delivery.reference || requiresComponents(delivery),
+    stages: requiresComponents(delivery)
+      ? ['拆解参考并保存部件清单', '建立灰模并匹配、锁定相机', '逐个部件独立建模、试材质和保存原工程', '导入独立部件组装、渲染并完善细节']
+      : ['拆解整体结构并保存structure.json', '复用代码建模、重开原工程、导出与实际渲染并核验audit.json'],
+    componentWorkflow: requiresComponents(delivery) ? { required: true, record: split.FILE, independentNativeProjects: true, separatePreviews: true, runnerStages: ['blockout', 'components', 'assemble'] } : null,
+    singleImageReview: requiresLookReview(delivery)
+      ? { record: look.FILE, requiredPreviews: look.STAGES.map(stage => stage.file), example: path.join(DIRECTORY, 'example.look-review.json') } : null,
     guide: path.join(DIRECTORY, 'README.md'), example: path.join(DIRECTORY, 'example.structure.json'),
     sourceImage: delivery.reference || null, limitation: '基础适配器支持box/sphere/cylinder；复杂几何需项目脚本扩展并沿用审计。跨软件材质和渲染不承诺一致，单图隐藏结构为显式假设。' };
 }
@@ -28,18 +38,23 @@ function folder(delivery) { return path.join(delivery.public.projectDirectory, d
 async function savePlan(delivery, raw) {
   if (!delivery || delivery.kind === 'image' || !delivery.stem || delivery.mode === 'render_only') throw new Error('先规划model_edit，再保存结构拆解方案');
   const plan = validatePlan(typeof raw === 'string' ? JSON.parse(raw) : structuredClone(raw));
+  if (requiresComponents(delivery)) { split.validateComponents(plan); plan.componentWorkflow = { version: 1, required: true }; }
   plan.frameworkVersion = VERSION; plan.reference = delivery.reference || null;
   const directory = folder(delivery); await fs.mkdir(directory, { recursive: true });
-  for (const name of [...CODE, 'README.md', 'example.structure.json']) await fs.copyFile(path.join(DIRECTORY, name), path.join(directory, name));
+  for (const name of [...CODE, 'README.md', 'example.structure.json', ...(requiresLookReview(delivery) ? ['example.look-review.json'] : [])]) await fs.copyFile(path.join(DIRECTORY, name), path.join(directory, name));
   const file = path.join(directory, 'structure.json'); await fs.writeFile(file, JSON.stringify(plan, null, 2) + '\n');
-  return { saved: true, stage: '结构拆解已保存，尚未建模或完成视觉验收', directory, plan: file, runner: path.join(directory, 'run.py'), outputStem: path.join(delivery.public.projectDirectory, delivery.stem), next: '选定软件后用run.py调用已安装软件；自定义建模复用common.py审计，生成audit.json后再登记。' };
+  delivery.frameworkPlanned = true;
+  return { saved: true, stage: '结构拆解已保存，尚未建模或完成视觉验收', directory, plan: file, runner: path.join(directory, 'run.py'), outputStem: path.join(delivery.public.projectDirectory, delivery.stem), next: requiresComponents(delivery) ? '按 --stage blockout → components → assemble 执行：先检查灰模，再逐个保存独立原工程及样片，最后实际导入这些部件组装。全部部件完成后才能登记最终模型。' : '选定软件后用run.py调用已安装软件；自定义建模复用common.py审计，生成audit.json后再登记。' };
 }
-async function verify(delivery, artifacts) {
+async function verify(delivery, artifacts, validateImage = () => true) {
   if (delivery.mode === 'render_only') return null;
+  // A local edit does not retroactively force an old reproduction snapshot to
+  // migrate. Only validate a newly requested framework plan for existing models.
+  if (delivery.source && !delivery.frameworkPlanned) return null;
   const directory = folder(delivery), auditFile = path.join(directory, 'audit.json');
   let audit;
   try { audit = JSON.parse(await fs.readFile(auditFile, 'utf8')); }
-  catch (e) { if (e.code === 'ENOENT' && !delivery.reference) return null; throw new Error('参考图建模需先保存结构拆解，并完成原工程重开与成图审计：缺少有效audit.json'); }
+  catch (e) { if (e.code === 'ENOENT' && !delivery.reference && !requiresComponents(delivery)) return null; throw new Error('新建模型需先拆分并分别建模，完成原工程重开与成图审计：缺少有效audit.json'); }
   const file = path.join(directory, 'structure.json'), data = await fs.readFile(file), p = validatePlan(JSON.parse(data));
   for (const name of CODE) if (sha(await fs.readFile(path.join(directory, name))) !== sha(await fs.readFile(path.join(DIRECTORY, name))) || audit.codeHashes?.[name] !== sha(await fs.readFile(path.join(directory, name)))) throw new Error('复现目录中的框架代码与当前版本不符；扩展请用独立项目脚本，保留基础工具原件');
   const scripts = (await fs.readdir(directory, { withFileTypes: true })).filter(e => e.isFile() && e.name.endsWith('.py')).map(e => e.name);
@@ -63,8 +78,11 @@ async function verify(delivery, artifacts) {
     if (!accessor || accessor.componentType !== 5126 || accessor.type !== 'VEC3' || accessor.count !== check.triangles * 3 || !view || view.byteStride && view.byteStride !== 12) throw new Error('GLB三角网格与审计不符：' + o.id);
     const low = [Infinity,Infinity,Infinity], high = [-Infinity,-Infinity,-Infinity], offset = (view.byteOffset || 0) + (accessor.byteOffset || 0);
     for (let i=0; i<accessor.count; i++) for (let j=0;j<3;j++) { const v=bin.readFloatLE(offset+i*12+j*4); if (!Number.isFinite(v)) throw new Error('GLB含非有限坐标'); low[j]=Math.min(low[j],v); high[j]=Math.max(high[j],v); }
-    for (let j=0;j<3;j++) if (Math.abs(low[j]-check.bounds[0][j]) > Math.max(1e-5,o.size[j]*1e-5) || Math.abs(high[j]-check.bounds[1][j]) > Math.max(1e-5,o.size[j]*1e-5)) throw new Error('GLB几何包围盒与原工程审计不符：' + o.id);
+    // POSITION is float32. Round native extrema to the same precision before comparing.
+    for (let j=0;j<3;j++) if (Math.abs(low[j]-Math.fround(check.bounds[0][j])) > Math.max(1e-5,o.size[j]*1e-5) || Math.abs(high[j]-Math.fround(check.bounds[1][j])) > Math.max(1e-5,o.size[j]*1e-5)) throw new Error('GLB几何包围盒与原工程审计不符：' + o.id);
   }
-  return { version: VERSION, directory, plan: file, audit: auditFile, software: audit.software, review: p.review };
+  const componentWorkflow = requiresComponents(delivery) ? await split.verifyWorkflow(directory, delivery, p, audit, artifacts, CODE, VERSION, validatePlan, validateImage) : null;
+  const lookReview = requiresLookReview(delivery) ? await look.verifyReview(directory, delivery.reference, artifacts.render, validateImage) : null;
+  return { version: VERSION, directory, plan: file, audit: auditFile, software: audit.software, review: p.review, componentWorkflow, lookReview };
 }
-module.exports = { VERSION, DIRECTORY, CODE, validatePlan, context, savePlan, verify };
+module.exports = { VERSION, DIRECTORY, CODE, validatePlan, context, savePlan, verify, requiresComponents };

@@ -2,7 +2,7 @@
 from __future__ import print_function
 import argparse, os, subprocess, sys, tempfile, shutil, json, io
 sys.dont_write_bytecode=True
-from common import load_plan
+from common import load_plan,CODE,digest
 
 p=argparse.ArgumentParser(description='Run the local, versioned modeling recipe without desktop automation.')
 p.add_argument('--software',choices=['blender','c4d'],required=True)
@@ -10,13 +10,24 @@ p.add_argument('--executable',required=True)
 p.add_argument('--plan',required=True)
 p.add_argument('--stem',required=True)
 p.add_argument('--no-render',action='store_true')
+p.add_argument('--stage',choices=['all','blockout','components','assemble','raw'],default='all')
+p.add_argument('--assembly-index',help='Internal index of independently saved native components for assembly.')
 p.add_argument('--replay-output',help='Reopen the saved native project and render only to this new PNG; do not rewrite model/native/audit.')
 a=p.parse_args()
-load_plan(a.plan)
+plan=load_plan(a.plan)
+if plan.get('components') and a.stage!='raw' and not a.replay_output:
+    from component_workflow import execute
+    execute(a);sys.exit(0)
+assembly=[]
+if a.assembly_index:
+    assembly=json.load(io.open(a.assembly_index,encoding='utf-8'))['components']
+    for part in assembly:
+        if digest(part['native']['file'])!=part['native']['sha256']:raise ValueError('Independent native component changed: '+part['id'])
 driver=os.path.join(os.path.dirname(os.path.abspath(__file__)),a.software+'_adapter.py')
 args=['--plan',os.path.abspath(a.plan),'--stem',os.path.abspath(a.stem)]
 if a.no_render:args+=['--no-render']
 if a.replay_output:args+=['--replay-output',os.path.abspath(a.replay_output)]
+if a.assembly_index:args+=['--assembly-index',os.path.abspath(a.assembly_index)]
 command=[a.executable,'--background','--factory-startup','--python-exit-code','1','--python',driver,'--']+args if a.software=='blender' else [a.executable,driver]+args
 options={}
 if sys.platform=='win32':
@@ -27,11 +38,15 @@ try:
         # R21 c4dpy cannot reliably parse non-ASCII script paths/argv. Keep the
         # launcher in an ASCII temporary directory; JSON preserves Unicode paths.
         stage=tempfile.mkdtemp(prefix='vlab-c4d-')
-        for name in ['common.py','run.py','blender_adapter.py','c4d_adapter.py']:
+        for name in CODE:
             shutil.copyfile(os.path.join(os.path.dirname(driver),name),os.path.join(stage,name))
         job=os.path.join(stage,'job.json');stage_stem=os.path.join(stage,'scene')
         if a.replay_output:shutil.copyfile(a.stem+'.c4d',stage_stem+'.c4d')
-        with open(job,'w') as f: json.dump(dict(plan=os.path.abspath(a.plan),stem=stage_stem,no_render=a.no_render,replay_output=os.path.join(stage,'replay.png') if a.replay_output else None),f)
+        staged=[]
+        for index,part in enumerate(assembly):
+            item=dict(part);item['native']=dict(part['native']);file=os.path.join(stage,'part_%03d.c4d'%index)
+            shutil.copyfile(part['native']['file'],file);assert digest(file)==part['native']['sha256'];item['native']['file']=file;staged.append(item)
+        with open(job,'w') as f: json.dump(dict(plan=os.path.abspath(a.plan),stem=stage_stem,no_render=a.no_render,replay_output=os.path.join(stage,'replay.png') if a.replay_output else None,assembly_sources=staged),f)
         command=[a.executable,os.path.join(stage,'c4d_adapter.py'),'--job',job]
         env=os.environ.copy();home=os.path.dirname(os.path.abspath(a.executable))
         env['PATH']=os.path.join(home,'resource','libs','win64')+os.pathsep+os.path.join(home,'corelibs')+os.pathsep+env.get('PATH','')

@@ -12,7 +12,7 @@ const framework = require('./modeling-framework.cjs');
 const relations = require('./asset-relations.cjs');
 const digest = data => createHash('sha256').update(data).digest('hex');
 const DELIVERY_TOOLS = [
-  { type: 'function', name: 'save_workbench_structure_plan', description: '第二步A：保存结构拆解方案，复制版本固定的建模框架。先规划model_edit，按modelingFramework.example的JSON结构填写；只保存方案不算完成建模。', inputSchema: { type: 'object', properties: { planJson: { type: 'string' } }, required: ['planJson'], additionalProperties: false } },
+  { type: 'function', name: 'save_workbench_structure_plan', description: '第一步：保存结构拆解和独立部件清单，复制四步建模框架。新建模型必须用components把objectIds完整拆分，随后先灰模、再分别建模、最后导入部件组装渲染。只保存方案不算完成建模。', inputSchema: { type: 'object', properties: { planJson: { type: 'string' } }, required: ['planJson'], additionalProperties: false } },
   { type: 'function', name: 'publish_workbench_image', description: '校验并登记独立生成/修改的PNG图片。用于没有关联模型的图片任务，输出路径由上下文output.image提供；不创建GLB、原工程或模型配对。没有新图片时不能报告完成。', inputSchema: { type: 'object', properties: {}, additionalProperties: false } },
   { type: 'function', name: 'get_workbench_context', description: '获取当前项目目录、输入模型、原工程、交付路径和命名规范。可以使用原生 shell/文件/建模工具完成任意用户授权的建模和渲染操作。', inputSchema: { type: 'object', properties: {}, additionalProperties: false } },
   { type: 'function', name: 'plan_workbench_delivery', description: '实际制作前选择本轮操作和路径。model_edit默认升版，明确保留版本时原版更新；render_only只补当前版PNG。自动识别与用户意思不符时，可用keepVersion和userQuote逐字引用用户本轮关于版本的原话调整，不能虚构授权。普通对话不调用。', inputSchema: { type: 'object', properties: { operation: { type: 'string', enum: ['model_edit', 'render_only'] }, keepVersion: { type: 'boolean' }, userQuote: { type: 'string' } }, required: ['operation'], additionalProperties: false } },
@@ -24,7 +24,8 @@ const AGENT_INSTRUCTIONS = `你是可视化实验室本地工作台中的 Codex�
 局部修改规则：本轮 editTargets 是用户在工作台右击后生成并手动发送的定位。以这些定位锁定输入文件及对象，不得用后来选中的对象替代。对象的 gltfNodeIndex 是输入 GLB/glTF JSON 的 nodes 下标（从0开始），层级路径和网格/primitive下标用于区分重名对象；不能把工作台运行时 UUID 当原工程对象编号。先核对原模型和原工程的名称、层级及几何对应，再仅修改指定部位，保留其他结构。成图定位使用原图左上角原点、x向右/y向下的像素及归一化坐标；先查看 imageInputs 中的原图（Codex同时收到图片输入，其他Agent使用本机读图工具），结合画面和模型/相机确认目标。像素不等于三维节点，无法确定对应结构时只询问必要信息，不猜改其他对象。没有配对模型的图片默认使用生图/改图工具，根据原图与位置意见重新输出独立图片，不要求用户关联模型，不调用Blender/C4D渲染。局部修改遵守本轮操作策略：是否升版由实际操作及用户明确指示决定，不由定位包装文字决定。
 软件选择规则：初版默认支持 C4D（Cinema 4D）和 Blender，不主动扩展其他软件接入。用户明确指定软件时，先核实本机安装和版本再执行。同一制作任务中用户已明确确认的软件可以继续沿用。新制作任务尚未指定或确认软件时，必须先扫描本机已安装的建模软件，优先检查 C4D 和 Blender：使用 PATH、安装注册表和常见安装目录，不无目的遍历全盘。列出检测到的软件、版本及可用情况，询问用户本次使用哪一个，并等待用户明确答复后才开始建模、模型修改、导出或渲染。即使只检测到一种软件，也要先询问；不能仅凭工程扩展名或助手上次自行采用的软件视为用户已选择。扫描阶段只检查环境和文件，不开始制作。未找到可用软件时如实说明，不自行安装或改用其他软件。
 用户选定软件后直接执行任务，不要因“只能聊天”而拒绝执行。建模和渲染默认采用脚本、命令行或软件API后台执行：Blender优先使用 --background/--python 和 bpy；C4D优先使用可用的命令行、Python或插件接口。不要默认使用computer-use、鼠标键盘自动点击、屏幕坐标操作或GUI截图操控，也不要为了建模/渲染自动启用电脑操控技能。只有用户明确要求GUI操作，或确认缺少脚本接口且说明原因并获得同意后，才切换到GUI。Windows 使用 Start-Process 时须用 -WindowStyle Hidden。用户未授权安装软件时不要自行安装。
-建模第二步分为两小步：A先查看参考并拆解整体结构，保存稳定对象ID、分组、几何尺寸位置、材质、相机、灯光、渲染参数和隐藏结构假设；B按代码框架建模、重开原工程检查实际几何、导出GLB并真实渲染PNG，最后核对结构和成图。框架路径与示例由modelingFramework提供。先plan_workbench_delivery，再save_workbench_structure_plan；读取返回目录的README和示例，用复制到项目的run.py调用已确认的软件。基础适配器只覆盖box/sphere/cylinder；复杂结构写独立项目脚本并复用common.py的审计和导出，不修改基础工具。参考图建模必须交付结构方案、原工程、实际PNG及audit.json；后端校验输入/方案/输出哈希、对象ID和几何。普通局部修改与仅渲染不强制重新拆解。没有专用工具时按同样格式复制代码到<交付前缀>_reproduction目录并生成structure.json/audit.json。保存代码、参数、软件版本、原图摘要和差异清单；不能把通过文件检查当成视觉验收，单张图不能唯一恢复遮挡结构，不承诺跨软件或硬件逐像素一致。
+新建模型采用四步流程，必须拆分后分别建模，不能直接一次生成整场冒充分步完成。第一步拆解参考或用户描述，保存稳定对象ID、分组、几何尺寸位置、材质、相机、灯光、渲染参数及隐藏结构假设；在components中按功能拆出独立部件，并用objectIds完整、不重复地覆盖全部几何对象。多对象至少拆成两个部件，重复阵列可作为一个部件，不必每颗球各建一个文件。第二步用整场灰模匹配轮廓、尺寸和遮挡，确认后锁定相机。第三步逐个部件单独建模、试材质与布光，每个部件保存独立.blend或.c4d、GLB、真实PNG样片及原工程重开审计。第四步实际导入已保存的部件原工程组装，保持各部件已验证的几何和材质，再小图试渲、渲染正式图并完善细节。按返回的README使用run.py的--stage blockout、components、assemble，或默认all顺序执行；每一步先查看实际输出再继续，不能用复制整场工程、截图、生图或改文件名充当独立部件。后端会核对component-workflow.json、部件清单、实际网格和组装来源，缺失则拒绝登记。基础适配器只覆盖box/sphere/cylinder；复杂结构使用独立项目脚本生成各自原工程，再复用common.py审计和component_workflow.record_component登记，最后组装。保存代码、参数、软件版本、原图摘要与差异清单。普通局部修改与仅渲染沿用现有路径；用户明确不渲染时保留独立部件原工程和GLB，不伪造PNG或宣称完成材质对照。文件检查不等于视觉或科学验收，单图不能唯一恢复遮挡结构，也不承诺跨环境逐像素一致。
+当 modelingFramework.singleImageReview 存在且用户要从参考图新建模型时，按建模指南的单图流程执行。整场灰模先拟合相机与轮廓；尽早做主要材质和光效，保存首轮，固定机位按区域试渲染。优先用原图裁切取证，不默认重新生图，不借用参考的原工程和教程。用低分辨率实际渲染比较至少一组可控参数的两个候选，保留较接近的结果后完成正式成图。把 blockout.png、first-render.png、候选和 look-review.json 存在复现目录，记录从原图看到的约束、实际参数改动、对照结论和真实文件摘要。不可用预制图、拼贴或重复文件充当候选。只把最终 PNG 交付为成图，剩余差异用自然语言告知用户。复现目录中的试渲染可在成图栏查看。
 图片用途与稳定命名：项目包含参考、模型、成片三个虚拟分组。生图参考和上传参考归reference，模型原生渲染或独立最终插图归render；参考不能冒充模型真实渲染。同一主体可有多张用途不同的参考，参考与模型按资源ID关联，不只靠文件名前缀。已有文件不因普通对话、补参考、重渲染而反复改名升版；实际改模型仍按原交付规则保留历史。
 imageOnly任务制作前，结合用户本轮需求、原图和assetCatalog判断图片用途、稳定主体名与参考关系，把JSON写入imagePlan.file。结构由imagePlan.schema说明：imageRole为reference或render，subject是简短稳定对象名，variant仅在确有不同用途时填写，例如结构/配色/视角；relatedModelIds只用于参考对应的真实模型ID；referenceIds用于独立成图采用的参考ID。不要每轮添加日期、时间戳或递增编号；没有足够依据不乱连不同对象。若明确需要不同独立图，使用能表达内容的主体/用途名。图片先写output.image暂存路径，工作台验证后自动发布、归组、备份更新稳定文件名，不直接覆盖项目原件。分类和定位规则是内部协议，不复述给用户。
 据参考建模时，结构方案subject填写稳定对象名，优先沿用准确的参考主体名；save_workbench_structure_plan可能返回校准后的outputStem，以返回路径制作。模型交付会继承参考ID，最终真实渲染继续与该模型同完整前缀。已有模型上下文的referenceImages包含关联参考，按本轮需要读取，不自行扫描其他图库。
@@ -184,6 +185,7 @@ class DeliveryManager {
     delivery.public.keepVersionAuthorized = !!delivery.keepAuthorized;
     if (operation === 'render_only') delivery.renderRequired = true;
     delivery.public.renderRequired = delivery.renderRequired;
+    delivery.public.modelingFramework = framework.context(delivery);
     this.pendingPlans.set(delivery.taskKey, { operation, keepAuthorized: delivery.keepAuthorized, renderRequired: delivery.renderRequired });
     return delivery.public;
   }
@@ -260,7 +262,7 @@ class DeliveryManager {
       if (native && delivery.nativeSource && native.sha256 === delivery.protectedFiles.find(p => p.file === delivery.nativeSource)?.sha256 && !delivery.initialNames.has(native.name.toLocaleLowerCase())) await fs.unlink(native.file);
       this.pendingPlans.delete(delivery.taskKey); return null;
     }
-    const reproduction = await framework.verify(delivery, { model, render, native });
+    const reproduction = await framework.verify(delivery, { model, render, native }, this.validateImage);
     const mode = delivery.mode;
     const revision = await this.projects.registerDelivery(delivery.context.projectId, delivery.context.assetId, { model, render, native, stem: delivery.stem, subject:delivery.subject || delivery.public.subject, referenceIds:[...(delivery.public.referenceImages || []).map(r => r.id),...(delivery.reference ? [delivery.reference.renderId] : [])], referenceHashes:[...(delivery.public.referenceImages || []).map(r => ({id:r.id,sha256:r.sha256})),...(delivery.reference ? [{id:delivery.reference.renderId,sha256:delivery.reference.sha256}] : [])], mode, modelChanged, sceneChanged: modelChanged || nativeChanged });
     delivery.published = true; this.pendingPlans.delete(delivery.taskKey);

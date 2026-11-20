@@ -2,7 +2,8 @@
 from __future__ import print_function
 import io, json, math, os, struct, hashlib, sys
 
-VERSION = '1.0.0'
+VERSION = '1.1.0'
+CODE = ['common.py', 'run.py', 'blender_adapter.py', 'c4d_adapter.py', 'component_workflow.py']
 try:
     STRING_TYPES = (basestring,)
 except NameError:
@@ -46,7 +47,21 @@ def load_plan(file):
     if not p.get('lights') or not all(finite(l.get('position'), 3) and finite(l.get('color'), 3) and l.get('power', 0) > 0 and l.get('size', 0) > 0 for l in p['lights']): raise ValueError('Explicit light rig required')
     ref = p.get('reference')
     if ref and digest(ref['file']) != ref['sha256']: raise ValueError('Reference changed after structural analysis')
+    if 'components' in p: validate_components(p)
     return p
+
+def validate_components(plan):
+    import re
+    parts=plan.get('components')
+    if not isinstance(parts,list) or not parts or len(parts)>64: raise ValueError('Split the model into named independent components first')
+    known=set(o['id'] for o in plan['objects']);seen=set();ids=set()
+    for part in parts:
+        key=part.get('id','');members=part.get('objectIds')
+        if not re.match(r'^[A-Za-z][A-Za-z0-9_-]{0,63}$',key) or key.lower() in ids or not part.get('name') or not isinstance(members,list) or not members: raise ValueError('Each component needs a unique ID, name and objectIds')
+        if len(set(members))!=len(members) or any(x not in known or x in seen for x in members): raise ValueError('Component object IDs must partition the planned geometry')
+        ids.add(key.lower());seen.update(members)
+    if seen!=known or len(known)>1 and len(parts)<2: raise ValueError('Multiple objects must be split into at least two independent components')
+    return parts
 
 def geometry_audit(plan, meshes):
     expected = set(o['id'] for o in plan['objects'])
@@ -104,8 +119,9 @@ def write_glb(file, plan, meshes):
     with open(file,'wb') as f:
         f.write(struct.pack('<III',0x46546c67,2,28+len(js)+len(binary))); f.write(struct.pack('<II',len(js),0x4e4f534a)); f.write(js); f.write(struct.pack('<II',len(binary),0x004e4942)); f.write(binary)
 
-def write_audit(plan_file, plan, stem, meshes, software, version, native, render, settings):
+def write_audit(plan_file, plan, stem, meshes, software, version, native, render, settings, assembly_sources=None):
     geometry=geometry_audit(plan, meshes)
     projectCodeHashes=dict((n,digest(os.path.join(os.path.dirname(plan_file),n))) for n in os.listdir(os.path.dirname(plan_file)) if n.endswith('.py') and os.path.isfile(os.path.join(os.path.dirname(plan_file),n)))
-    codeHashes=dict((n,digest(os.path.join(os.path.dirname(__file__),n))) for n in ['common.py','run.py','blender_adapter.py','c4d_adapter.py'])
-    write_json(os.path.join(os.path.dirname(plan_file),'audit.json'),dict(frameworkVersion=VERSION,codeHashes=codeHashes,projectCodeHashes=projectCodeHashes,software=software,softwareVersion=str(version),pythonVersion=sys.version,platform=sys.platform,planSha256=digest(plan_file),nativeReopened=True,geometry=geometry,renderSettings=settings,files=dict(model=dict(name=os.path.basename(stem+'.glb'),sha256=digest(stem+'.glb')),native=dict(name=os.path.basename(native),sha256=digest(native)),render=dict(name=os.path.basename(render),sha256=digest(render)) if render else None),reference=plan.get('reference'),review=plan.get('review',dict(status='pending',differences=[]))))
+    codeHashes=dict((n,digest(os.path.join(os.path.dirname(__file__),n))) for n in CODE)
+    assembly=dict(method='native-component-import',sources=[dict(id=s['id'],objectIds=s['objectIds'],nativeSha256=s['native']['sha256']) for s in assembly_sources]) if assembly_sources else None
+    write_json(os.path.join(os.path.dirname(plan_file),'audit.json'),dict(frameworkVersion=VERSION,codeHashes=codeHashes,projectCodeHashes=projectCodeHashes,software=software,softwareVersion=str(version),pythonVersion=sys.version,platform=sys.platform,planSha256=digest(plan_file),nativeReopened=True,geometry=geometry,renderSettings=settings,assembly=assembly,files=dict(model=dict(name=os.path.basename(stem+'.glb'),sha256=digest(stem+'.glb')),native=dict(name=os.path.basename(native),sha256=digest(native)),render=dict(name=os.path.basename(render),sha256=digest(render)) if render else None),reference=plan.get('reference'),review=plan.get('review',dict(status='pending',differences=[]))))

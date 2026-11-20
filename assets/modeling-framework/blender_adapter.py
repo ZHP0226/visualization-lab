@@ -1,12 +1,12 @@
 # coding: utf-8
-import argparse, os, sys
+import argparse, os, sys, json
 sys.dont_write_bytecode=True
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import bpy
 from mathutils import Vector
 from common import load_plan, geometry_audit, write_glb, write_audit, digest
 
-p=argparse.ArgumentParser();p.add_argument('--plan',required=True);p.add_argument('--stem',required=True);p.add_argument('--no-render',action='store_true');p.add_argument('--replay-output')
+p=argparse.ArgumentParser();p.add_argument('--plan',required=True);p.add_argument('--stem',required=True);p.add_argument('--no-render',action='store_true');p.add_argument('--replay-output');p.add_argument('--assembly-index')
 a=p.parse_args(sys.argv[sys.argv.index('--')+1:]);plan=load_plan(a.plan);native=a.stem+'.blend'
 def linear(c):return c/12.92 if c<=.04045 else ((c+.055)/1.055)**2.4
 if a.replay_output:
@@ -22,14 +22,30 @@ world=bpy.data.worlds.new('Environment');world.use_nodes=True;world.node_tree.no
 mats={}
 for spec in plan['materials']:
     m=bpy.data.materials.new(spec['id']);m.use_nodes=True;n=m.node_tree.nodes.get('Principled BSDF');n.inputs['Base Color'].default_value=[linear(c) for c in spec['color']]+[1];n.inputs['Metallic'].default_value=spec.get('metallic',0);n.inputs['Roughness'].default_value=spec.get('roughness',.5);mats[spec['id']]=m
-groups={}
+groups={};imported={};assembly=[]
+if a.assembly_index:
+    with open(a.assembly_index,encoding='utf-8') as f:assembly=json.load(f)['components']
+    for part in assembly:
+        file=part['native']['file']
+        expected_ids=tuple(part['objectIds'])
+        if digest(file)!=part['native']['sha256']:raise ValueError('Native component changed before import')
+        with bpy.data.libraries.load(file,link=False) as (source,target):
+            if not set(expected_ids).issubset(source.objects):raise ValueError('Independent native component is missing planned objects')
+            target.objects=list(expected_ids)
+        for obj in target.objects:
+            if obj is None or obj.get('workbench_id') not in expected_ids:raise ValueError('Invalid independent native object')
+            imported[obj['workbench_id']]=obj;scene.collection.objects.link(obj)
 for spec in plan['objects']:
     shape=spec['shape']
-    if shape=='box':bpy.ops.mesh.primitive_cube_add(size=2)
-    elif shape=='sphere':bpy.ops.mesh.primitive_uv_sphere_add(segments=32,ring_count=16,radius=1)
-    elif shape=='cylinder':bpy.ops.mesh.primitive_cylinder_add(vertices=48,radius=1,depth=2)
-    else:raise ValueError('Custom geometry requires a project-specific builder using the common audit/export utilities; it is not a supported primitive.')
-    o=bpy.context.object;o.name=spec['id'];o['workbench_id']=spec['id'];o.location=spec['position'];o.scale=[v/2 for v in spec['size']];o.data.materials.append(mats[spec['material']])
+    if assembly:
+        if spec['id'] not in imported:raise ValueError('Missing independently built native component')
+        o=imported[spec['id']];o.name=spec['id']
+    else:
+        if shape=='box':bpy.ops.mesh.primitive_cube_add(size=2)
+        elif shape=='sphere':bpy.ops.mesh.primitive_uv_sphere_add(segments=32,ring_count=16,radius=1)
+        elif shape=='cylinder':bpy.ops.mesh.primitive_cylinder_add(vertices=48,radius=1,depth=2)
+        else:raise ValueError('Custom geometry requires a project-specific builder using the common audit/export utilities; it is not a supported primitive.')
+        o=bpy.context.object;o.name=spec['id'];o['workbench_id']=spec['id'];o.location=spec['position'];o.scale=[v/2 for v in spec['size']];o.data.materials.append(mats[spec['material']])
     group=spec.get('group','Structure')
     if group not in groups:
         col=bpy.data.collections.new(group);scene.collection.children.link(col);groups[group]=col
@@ -48,5 +64,5 @@ for spec in plan['objects']:
     evaluated=o.evaluated_get(deps);m=evaluated.to_mesh();m.calc_loop_triangles();points=[list(o.matrix_world@v.co) for v in m.vertices];tris=[list(t.vertices) for t in m.loop_triangles];meshes.append(dict(id=spec['id'],vertices=points,triangles=tris));evaluated.to_mesh_clear()
 geometry_audit(plan,meshes);write_glb(a.stem+'.glb',plan,meshes)
 if not a.no_render:bpy.ops.render.render(write_still=True)
-write_audit(a.plan,plan,a.stem,meshes,'blender',bpy.app.version_string,native,None if a.no_render else a.stem+'.png',dict(engine=scene.render.engine,device=scene.cycles.device,width=scene.render.resolution_x,height=scene.render.resolution_y,samples=scene.cycles.samples,seed=scene.cycles.seed,viewTransform=scene.view_settings.view_transform,adaptiveSampling=scene.cycles.use_adaptive_sampling,denoising=scene.cycles.use_denoising))
+write_audit(a.plan,plan,a.stem,meshes,'blender',bpy.app.version_string,native,None if a.no_render else a.stem+'.png',dict(engine=scene.render.engine,device=scene.cycles.device,width=scene.render.resolution_x,height=scene.render.resolution_y,samples=scene.cycles.samples,seed=scene.cycles.seed,viewTransform=scene.view_settings.view_transform,adaptiveSampling=scene.cycles.use_adaptive_sampling,denoising=scene.cycles.use_denoising),assembly)
 print('FRAMEWORK_BUILD_AND_AUDIT_OK')
